@@ -1,7 +1,7 @@
 var express     = require("express"),
     router      = express.Router(),
     passport    = require("passport"),
-    User        = require("../models/user");
+    User        = require("../models/User");
 
 
 router.get("/register", function(req, res) {
@@ -17,8 +17,8 @@ router.post("/register", function(req, res) {
             res.redirect("/register");
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to YelpCamp" + user.username);
-            res.redirect("/campgrounds");
+            req.flash("success", "Welcome to YelpCamp " + user.username + "!");
+            res.redirect("/");
         });
     });
 });
@@ -31,7 +31,9 @@ router.get("/login", function(req, res) {
 // handles login logic
 router.post("/login", passport.authenticate("local",
      {  successRedirect: "/",
-        failureRedirect: "/login"
+        successFlash: "Welcome!",
+        failureRedirect: "/login",
+        failureFlash: true
      }), function(req, res) {
 });
 
