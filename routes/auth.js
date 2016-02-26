@@ -13,7 +13,6 @@ router.post("/register", function(req, res) {
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             req.flash("error", err.message);
-            console.log(err);
             res.redirect("/register");
         } else {
             user.starScore = 0;
