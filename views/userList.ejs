@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <p class="lead"><%= user.username %></p>
             <div class="list-group">
                 <% user.list.forEach(function(item) { %>
@@ -10,7 +10,24 @@
                 <% }); %>
             </div>
         </div>
+        <div class="col-md-4">
+            <p class="lead">Star Score</p>
+            <div class="list-group">
+                <li class="list-group-item"><%= user.starScore %></li>
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="lead">Friends</p>
+            <div class="list-group">
+                <% user.friends.forEach(function(friend) { %>
+                    <li class="list-group-item"><%= friend.username %></li>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 <% include partials/footer %>

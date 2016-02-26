@@ -6,7 +6,7 @@ var express     = require("express"),
 //SHOW
 router.get("/user/:id",middleware.checkOwnership, function(req, res){
     // find the campground with provided ID
-    User.findById(req.params.id, function(err, user){
+    User.findById(req.params.id).populate("friends").exec(function(err, user){
         if(err){
             console.log(err);
             req.flash("error", "User not found!");
