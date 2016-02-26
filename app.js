@@ -54,6 +54,10 @@ app.use(require("./routes/404"));
 // Connect Database -----------------------------------------------------------
 mongoose.connect(process.env.DATABASEURL || "mongodb://localhost/orion");
 
+// Database seed
+var seedDb  = require("./seeds");
+seedDb();
+
 // Listen ---------------------------------------------------------------------
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Server running at " + process.env.IP + " on port: " + process.env.PORT + ".  Better go catch it!");
