@@ -19,7 +19,6 @@ router.post("/register", function(req, res) {
         user.starScore = 0;
         user.list.push({title: "Make a List!", starValue: 1});
         user.save();
-        // user.friends.push(User.findById("56cf9553a39ca78a04e921f8"));
         passport.authenticate("local")(req, res, function(){
             req.flash("success", "Welcome to YelpCamp " + user.username + "!");
             res.redirect("/");

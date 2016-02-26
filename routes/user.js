@@ -3,6 +3,22 @@ var express     = require("express"),
     User        = require("../models/User"),
     middleware  = require("../middleware");
     
+
+//INDEX
+router.get("/user", function(req, res) {
+    // Get all campgrounds from DB
+    User.find({}, function(err, users){
+        if (err) {
+            console.log(err);
+            req.flash("error", "Something went horribly wrong!");
+            res.redirect("/");
+        } else {
+            res.render("user/index", {users: users});
+        }
+    });
+});
+
+
 //SHOW
 router.get("/user/:id",middleware.checkOwnership, function(req, res){
     // find the campground with provided ID
@@ -12,7 +28,7 @@ router.get("/user/:id",middleware.checkOwnership, function(req, res){
             req.flash("error", "User not found!");
             res.redirect("/");
         } else {
-            res.render("userList", {user: user});
+            res.render("user/show", {user: user});
         }
     });
 });

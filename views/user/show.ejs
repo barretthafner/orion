@@ -1,9 +1,9 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <p class="lead"><%= user.username %></p>
+            <p class="lead"><%= user.username %>'s List</p>
             <div class="list-group">
                 <% user.list.forEach(function(item) { %>
                     <li class="list-group-item"><%= item.title %></li>
@@ -30,4 +30,4 @@
     
 </div>
 
-<% include partials/footer %>
+<% include ../partials/footer %>
