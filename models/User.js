@@ -8,7 +8,11 @@ var UserSchema = new mongoose.Schema({
     list: [{
         title: String,
         starValue: Number
-    }]
+    }],
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
 });
 
 UserSchema.plugin(passportLocalMongoose);
