@@ -7,6 +7,7 @@ var data = [
     {
         username: "barrett",
         password: "barrett",
+        email: "barrett@orionapp.com",
         starScore: 5,
         list: [
             {
@@ -26,6 +27,7 @@ var data = [
     {
         username: "katy",
         password: "katy",
+        email: "katy@orionapp.com",
         starScore: 5,
         list: [
             {
@@ -45,6 +47,7 @@ var data = [
     {
         username: "testy",
         password: "testy",
+        email: "testy@orionapp.com",
         starScore: 6,
         list: [
             {
@@ -77,6 +80,7 @@ function seedDb() {
                     if (err){
                         console.log(err);
                     } else {
+                        user.email = seed.email;
                         user.starScore = seed.starScore;
                         user.list = seed.list;
                         user.save();
