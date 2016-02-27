@@ -11,6 +11,11 @@
         <% users.forEach(function(user){ %>
             <div class="col-md-12">
                 <p><%= user.username %></p>
+                <% if (currentUser && !user._id.equals(currentUser._id)) { %>
+                    <form action="/user/<%= currentUser._id %>/friends/<%= user._id %>" method="POST">
+                        <button class="btn btn-primary">Request Friendship</button>
+                    </form>
+                <% } %>
             </div>
         <% }); %>
     </div>

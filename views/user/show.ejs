@@ -20,9 +20,14 @@
     <div class="row">
         <div class="col-md-12">
             <p class="lead">Friends</p>
+            <a class="btn btn-primary" href="/user/">Find More Friends</a>
             <div class="list-group">
-                <% user.friends.forEach(function(friend) { %>
-                    <li class="list-group-item"><%= friend.username %></li>
+                <% friends.forEach(function(friend) { %>
+                    <li class="list-group-item">
+                        <p><%= friend.friend.username %></p>
+                        <p>Status: <%= friend.status %></p>
+                        <div class="btn btn-warning">Remove Friend</div>
+                    </li>
                 <% }); %>
             </div>
         </div>

@@ -49,6 +49,7 @@ app.use(function(req, res, next){
 app.use(require("./routes/root"));
 app.use(require("./routes/auth"));
 app.use(require("./routes/user"));
+app.use(require("./routes/friends"));
 app.use(require("./routes/404"));
 
 // Connect Database -----------------------------------------------------------

@@ -22,13 +22,21 @@ router.get("/user", middleware.isLoggedIn, function(req, res) {
 //SHOW
 router.get("/user/:id", middleware.isLoggedIn, function(req, res){
     // find the campground with provided ID
-    User.findById(req.params.id).populate("friends").exec(function(err, user){
+    User.findById(req.params.id, function(err, user){
         if(err){
             console.log(err);
             req.flash("error", "User not found!");
             res.redirect("back");
         } else if (user) {
-            res.render("user/show", {user: user});
+            User.getFriends(user, function(err, friends){
+                if(err){
+                    console.log(err);
+                    req.flash("error", "Error finding friends list.");
+                    res.redirect("back");
+                } else {
+                    res.render("user/show", {user: user, friends: friends});
+                }
+            });
         } else {
             req.flash("error", "User not found!");
             res.redirect("back");
