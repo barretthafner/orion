@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "A web app for getting things done with your friends",
   "main": "app.js",
+  "clientMain": "client/src/app/index.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,7 +26,11 @@
     "mongoose": "^4.5.8",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^4.0.0"
+    "passport-local-mongoose": "^4.0.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",
