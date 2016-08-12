@@ -37,15 +37,15 @@ app.use(passport.session());
 //passport.deserializeUser(User.deserializeUser());
 
 // Add middleware -------------------------------------------------------------
-app.use(function(req, res, next){
-    res.locals.currentUser = req.user;
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    next();
-});
+//app.use(function(req, res, next){
+//    res.locals.currentUser = req.user;
+//    res.locals.success = req.flash("success");
+//    res.locals.error = req.flash("error");
+//    next();
+//});
 
-// Add routes -----------------------------------------------------------------
-//app.use(require("./api/auth"));
+ Add routes -----------------------------------------------------------------
+app.use(require("./api/auth"));
 //app.use(require("./api/user"));
 
 // Connect Database -----------------------------------------------------------
@@ -57,5 +57,5 @@ app.use(function(req, res, next){
 
 // Listen ---------------------------------------------------------------------
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Server running at " + process.env.IP + " on port: " + process.env.PORT + ".  Better go catch it!");
+    console.log("Server running at ->    http://" + process.env.IP + ":" + process.env.PORT + "/\nBetter go catch it!");
 });
