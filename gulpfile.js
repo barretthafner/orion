@@ -41,7 +41,7 @@ const paths = {
   },
   dist: {
     index: './client/dist/',
-    sass: './client/dist/sass/',
+    sass: './client/dist/css/',
     img: './client/dist/img/',
     app: './client/dist/js/',
     js: './client/dist/js/'
