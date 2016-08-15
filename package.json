@@ -6,7 +6,7 @@
   "clientMain": "client/src/app/index.jsx",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --compilers js:babel-core/register --recursive"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.6.1",
+    "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0"
   },

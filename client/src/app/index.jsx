@@ -1,15 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 //  -------------------------------------------------------------------
 
+import reducers from './reducers';
 import { LandingPage } from './components/landingPage';
 import { LoginPage } from './components/loginPage';
 import { RegistrationPage } from './components/registrationPage';
 
 //  -------------------------------------------------------------------
+
+
+const store = createStore(
+  combineReducers({
+    ...reducers,
+    routing: routerReducer
+  })
+);
 
 const routes = (
   <Router history={browserHistory}>
