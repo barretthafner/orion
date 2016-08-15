@@ -3,19 +3,18 @@ import { routerReducer, syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import ReduxThunk from 'redux-thunk';
 
-import test from './reducers/';
+import app from './reducers/';
 
 const rootReducer = combineReducers({
-  test,
+  app,
   routing: routerReducer
 });
 
 const initialState = {
-  test: {
-    fun: false
+  app: {
+    user: null
   }
 };
 
 export const store = createStore(rootReducer, initialState, applyMiddleware(ReduxThunk));
-
 export const history = syncHistoryWithStore(browserHistory, store);

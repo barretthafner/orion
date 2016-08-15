@@ -7,7 +7,7 @@ var express     = require("express"),
 
 
 router.post("/api/register", jsonParser, function(req, res) {
-      console.log(req.body);
+    res.json(req.body);
 //    var newUser = new User({username: req.body.username});
 //    User.register(newUser, req.body.password, function(err, user){
 //        if(err){
@@ -18,7 +18,7 @@ router.post("/api/register", jsonParser, function(req, res) {
 //            user.list.push({title: "Make a List!", starValue: 1});
 //            user.save();
 //            passport.authenticate("local")(req, res, function(){
-//                req.flash("success", "Welcome to YelpCamp " + user.username + "!");
+//                req.flash("success", "Welcome to Orion " + user.username + "!");
 //                res.redirect("/user/" + user._id );
 //            });
 //        }

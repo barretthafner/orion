@@ -6,7 +6,7 @@ export const LoginPage = React.createClass({
     return (
       <div>
        <NavBar />
-        <div class="container well">
+        <div className="container well">
           <h1>Login</h1>
           <form action="/api/login" method="POST">
             <input type="text" name="username" placeholder="username" />

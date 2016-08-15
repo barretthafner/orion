@@ -15,6 +15,16 @@ var express         = require("express"),
     LocalStrategy   = require("passport-local"),
     app             = express();
 
+
+// Configure Database -----------------------------------------------------------
+// Use native promises
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.ORIONDBURL || "mongodb://localhost/orion");
+
+// Database seed
+var seedDb  = require("./seeds");
+seedDb();
+
 // Configure packages ---------------------------------------------------------
 app.use(express.static(__dirname + "/client/dist"));
 app.use(methodOverride("_method"));
@@ -27,13 +37,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-//// Add models -----------------------------------------------------------------
-//var User = require("./server/models/User");
-//
-//// Passport configuration -----------------------------------------------------
-//passport.use(new LocalStrategy(User.authenticate()));
-//passport.serializeUser(User.serializeUser());
-//passport.deserializeUser(User.deserializeUser());
+// Add models -----------------------------------------------------------------
+var User = require("./server/models/User");
+
+// Passport configuration -----------------------------------------------------
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Add middleware -------------------------------------------------------------
 //app.use(function(req, res, next){
@@ -47,12 +57,6 @@ app.use(passport.session());
 app.use(require("./server/api/auth"));
 //app.use(require("./api/user"));
 
-// Connect Database -----------------------------------------------------------
-//mongoose.connect(process.env.ORIONDBURL || "mongodb://localhost/orion");
-
-// Database seed
-//var seedDb  = require("./seeds");
-//seedDb();
 
 // Listen ---------------------------------------------------------------------
 app.listen(process.env.PORT, process.env.IP, function(){

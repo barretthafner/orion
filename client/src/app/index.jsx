@@ -11,12 +11,11 @@ import { store, history } from './store';
 
 import { LandingPage } from './components/landingPage';
 import { LoginPage } from './components/loginPage';
-import { RegistrationPage } from './components/registrationPage';
+import RegistrationPage from './components/registrationPage';
 
 //  -------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', function() {
-  console.log(store.getState());
   ReactDOM.render(
     <Provider store={store}>
       <Router history={history}>
