@@ -1,35 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import { Router, Route } from 'react-router';
 
 //  -------------------------------------------------------------------
 
-import reducers from './reducers';
+import { store, history } from './store';
+
+//  -------------------------------------------------------------------
+
 import { LandingPage } from './components/landingPage';
 import { LoginPage } from './components/loginPage';
 import { RegistrationPage } from './components/registrationPage';
 
 //  -------------------------------------------------------------------
 
-
-const store = createStore(
-  combineReducers({
-    ...reducers,
-    routing: routerReducer
-  })
-);
-
-const routes = (
-  <Router history={browserHistory}>
-    <Route path='/' component={LandingPage}></Route>
-    <Route path='/login' component={LoginPage}></Route>
-    <Route path='/register' component={RegistrationPage}></Route>
-  </Router>
-);
-
 document.addEventListener('DOMContentLoaded', function() {
-  ReactDOM.render(routes, document.getElementById('app'));
+  console.log(store.getState());
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={history}>
+        <Route path='/' component={LandingPage}></Route>
+        <Route path='/login' component={LoginPage}></Route>
+        <Route path='/register' component={RegistrationPage}></Route>
+      </Router>
+    </Provider>,
+    document.getElementById('app'));
 });
