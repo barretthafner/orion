@@ -28779,6 +28779,9 @@
 	
 	var RegistrationPage = exports.RegistrationPage = _react2.default.createClass({
 	  displayName: 'RegistrationPage',
+	  onSubmit: function onSubmit(event) {
+	    event.preventDefault();
+	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',

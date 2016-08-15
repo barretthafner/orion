@@ -2,6 +2,11 @@ import React from 'react';
 import { NavBar } from './nav';
 
 export const RegistrationPage = React.createClass({
+
+  onSubmit(event) {
+    event.preventDefault()
+  },
+
   render() {
     return (
       <div>

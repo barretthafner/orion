@@ -17,7 +17,6 @@ var express         = require("express"),
 
 // Configure packages ---------------------------------------------------------
 app.use(express.static(__dirname + "/client/dist"));
-app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.use(session({
@@ -44,8 +43,8 @@ app.use(passport.session());
 //    next();
 //});
 
- Add routes -----------------------------------------------------------------
-app.use(require("./api/auth"));
+// Add routes -----------------------------------------------------------------
+app.use(require("./server/api/auth"));
 //app.use(require("./api/user"));
 
 // Connect Database -----------------------------------------------------------
