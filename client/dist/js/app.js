@@ -75,7 +75,23 @@
 	
 	var _registrationPage2 = _interopRequireDefault(_registrationPage);
 	
+	var _nav = __webpack_require__(272);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	//  -------------------------------------------------------------------
+	
+	var App = _react2.default.createClass({
+	  displayName: 'App',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_nav.NavBar, null),
+	      this.props.children
+	    );
+	  }
+	});
 	
 	//  -------------------------------------------------------------------
 	
@@ -88,14 +104,16 @@
 	    _react2.default.createElement(
 	      _reactRouter.Router,
 	      { history: _store.history },
-	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _landingPage.LandingPage }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _loginPage.LoginPage }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/register', component: _registrationPage2.default })
+	      _react2.default.createElement(
+	        _reactRouter.Route,
+	        { path: '/', component: App },
+	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage.LoginPage }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default })
+	      )
 	    )
 	  ), document.getElementById('app'));
 	});
-	
-	//  -------------------------------------------------------------------
 
 /***/ },
 /* 2 */
@@ -28604,7 +28622,7 @@
 	
 	var initialState = {
 	  app: {
-	    user: null
+	    loggedIn: null
 	  }
 	};
 	
@@ -29064,6 +29082,7 @@
 	        credentials: credentials
 	      })
 	    }).then(function (res) {
+	      console.log(res);
 	      if (res.state < 200 || res.status >= 300) {
 	        var error = new Error(res.statusText);
 	        error.res = res;
@@ -29073,7 +29092,7 @@
 	    }).then(function (res) {
 	      return res.json();
 	    }).then(function (data) {
-	      return dispatch(registerSuccess(data.credentials));
+	      return dispatch(registerSuccess(data.username));
 	    }).catch(function (error) {
 	      return dispatch(registerError(error));
 	    });
@@ -29611,20 +29630,9 @@
 	var LandingPage = exports.LandingPage = _react2.default.createClass({
 	  displayName: 'LandingPage',
 	  render: function render() {
-	
-	    var user = void 0;
-	    if (this.props.currentUser) {
-	      user = _react2.default.createElement(
-	        'a',
-	        { className: 'btn btn-success', href: "/api/user/" + currentUser._id },
-	        'Go to List'
-	      );
-	    }
-	
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(_nav.NavBar, null),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'jumbotron' },
@@ -29763,23 +29771,18 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      null,
-	      _react2.default.createElement(_nav.NavBar, null),
+	      { className: 'container well' },
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'container well' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Login'
-	        ),
-	        _react2.default.createElement(
-	          'form',
-	          { action: '/api/login', method: 'POST' },
-	          _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: 'username' }),
-	          _react2.default.createElement('input', { type: 'password', name: 'password', placeholder: 'password' }),
-	          _react2.default.createElement('input', { type: 'submit', value: 'Login' })
-	        )
+	        'h1',
+	        null,
+	        'Login'
+	      ),
+	      _react2.default.createElement(
+	        'form',
+	        { action: '/api/login', method: 'POST' },
+	        _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: 'username' }),
+	        _react2.default.createElement('input', { type: 'password', name: 'password', placeholder: 'password' }),
+	        _react2.default.createElement('input', { type: 'submit', value: 'Login' })
 	      )
 	    );
 	  }
@@ -29814,33 +29817,45 @@
 	var RegistrationPage = _react2.default.createClass({
 	  displayName: 'RegistrationPage',
 	  render: function render() {
+	    var _this = this;
+	
 	    var props = this.props;
 	    return _react2.default.createElement(
 	      'div',
-	      null,
-	      _react2.default.createElement(_nav.NavBar, null),
+	      { className: 'container well' },
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'container well' },
+	        'h1',
+	        null,
+	        'Sign Up'
+	      ),
+	      _react2.default.createElement(
+	        'form',
+	        { onSubmit: function onSubmit(event) {
+	            event.preventDefault();
+	            console.log(_this);
+	            //                if(!props.state.user) {
+	            //                  props.register({
+	            //                    username: this.refs.username.value,
+	            //                    password: "testy"
+	            //                  });
+	            //                }
+	          } },
 	        _react2.default.createElement(
-	          'h1',
+	          'label',
 	          null,
-	          'Sign Up'
+	          _react2.default.createElement('input', { ref: 'email', placeholder: 'email' })
 	        ),
 	        _react2.default.createElement(
-	          'form',
+	          'label',
 	          null,
-	          _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: 'username' }),
-	          _react2.default.createElement('input', { type: 'password', name: 'password', placeholder: 'password' }),
-	          _react2.default.createElement('input', { type: 'submit', onClick: function onClick(event) {
-	              event.preventDefault();
-	              if (!props.state.user) {
-	                props.register({
-	                  username: "test",
-	                  password: "testy"
-	                });
-	              }
-	            } })
+	          _react2.default.createElement('input', { ref: 'pass', placeholder: 'password' })
+	        ),
+	        ' (hint: password1)',
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit' },
+	          'Submit'
 	        )
 	      )
 	    );

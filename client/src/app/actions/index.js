@@ -13,6 +13,7 @@ export const register = (credentials) => {
         })
       })
       .then((res) => {
+        console.log(res);
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
           error.res = res;
@@ -25,7 +26,7 @@ export const register = (credentials) => {
       })
       .then((data) => {
         return dispatch(
-          registerSuccess(data.credentials)
+          registerSuccess(data.username)
         );
       })
       .catch((error) => {
@@ -102,3 +103,5 @@ export const loginError = (error) => {
     error
   }
 }
+
+

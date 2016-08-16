@@ -7,30 +7,32 @@ var express     = require("express"),
 
 
 router.post("/api/register", jsonParser, function(req, res) {
-    res.json(req.body);
-//    var newUser = new User({username: req.body.username});
-//    User.register(newUser, req.body.password, function(err, user){
-//        if(err){
-//            req.flash("error", err.message);
-//            res.redirect("/register");
-//        } else {
-//            user.starScore = 0;
-//            user.list.push({title: "Make a List!", starValue: 1});
-//            user.save();
-//            passport.authenticate("local")(req, res, function(){
-//                req.flash("success", "Welcome to Orion " + user.username + "!");
-//                res.redirect("/user/" + user._id );
-//            });
-//        }
+  res.status(200).json(req.body);
+//  if (req.body.credentials) {
+//    const credentials = req.body.credentials;
+//    const newUser = new User({username: credentials.username});
+//    User.register(newUser, credentials.password, function(err, user){
+//      if(err){
+//        req.flash("error", err.message);
+//        res.status(500).json(err);
+//      } else {
+//        user.starScore = 0;
+//        user.list.push({title: "Make a List!", starValue: 1});
+//        user.save();
+//        passport.authenticate("local")(req, res, function(){
+//        console.log("bamm!");
+//          req.flash("success", "Welcome to Orion " + user.username + "!");
+//          res.status(201).json(user.username);
+//        });
+//      }
 //    });
+//  }
+//  res.status(400);
 });
 
-//// show login in form
-//router.get("/login", function(req, res) {
-//    res.render("login");
-//});
-//
-//router.post('/login', function(req, res, next) {
+// login route
+router.post('/api/login', jsonParser, function(req, res, next) {
+  res.status(200).json(req.body);
 //  passport.authenticate('local', function(err, user, info) {
 //    if (err) {
 //        req.flash("error", info.message);
@@ -51,9 +53,9 @@ router.post("/api/register", jsonParser, function(req, res) {
 //        });
 //    }
 //  })(req, res, next);
-//});
-//
-//// logout route
+});
+
+// logout route
 //router.get("/logout", function(req, res) {
 //    req.logout();
 //    req.flash("success", "You are logged out!");

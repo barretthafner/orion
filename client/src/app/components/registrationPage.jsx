@@ -8,26 +8,24 @@ const RegistrationPage = React.createClass({
   render() {
     const props = this.props;
     return (
-      <div>
-       <NavBar />
-        <div className="container well">
-          <h1>Sign Up</h1>
-          <form>
-            <input type="text" name="username" placeholder="username" />
-            <input type="password" name="password" placeholder="password" />
-            <input type="submit" onClick={
-                (event) => {
-                  event.preventDefault();
-                  if(!props.state.user) {
-                    props.register({
-                      username: "test",
-                      password: "testy"
-                    });
-                  }
-                }
-              }/>
-          </form>
-        </div>
+      <div className="container well">
+        <h1>Sign Up</h1>
+        <form onSubmit={
+          (event) => {
+              event.preventDefault();
+              console.log(this);
+//                if(!props.state.user) {
+//                  props.register({
+//                    username: this.refs.username.value,
+//                    password: "testy"
+//                  });
+//                }
+            }
+          }>
+          <label><input ref="email" placeholder="email" /></label>
+          <label><input ref="pass" placeholder="password" /></label> (hint: password1)<br />
+          <button type="submit">Submit</button>
+        </form>
       </div>
     );
   }
