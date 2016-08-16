@@ -13,7 +13,6 @@ export const register = (credentials) => {
         })
       })
       .then((res) => {
-        console.log(res);
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
           error.res = res;
@@ -25,8 +24,9 @@ export const register = (credentials) => {
         return res.json();
       })
       .then((data) => {
+        console.log(data);
         return dispatch(
-          registerSuccess(data.username)
+          registerSuccess(data)
         );
       })
       .catch((error) => {
@@ -38,10 +38,10 @@ export const register = (credentials) => {
 }
 
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const registerSuccess = (credentials) => {
+export const registerSuccess = (user) => {
   return {
     type: REGISTER_SUCCESS,
-    credentials
+    user
   }
 }
 export const REGISTER_ERROR = 'REGISTER_ERROR';
@@ -78,7 +78,7 @@ export const login = (credentials) => {
       })
       .then((data) => {
         return dispatch(
-          loginSuccess(data.credentials)
+          loginSuccess(data.user)
         );
       })
       .catch((error) => {
@@ -90,10 +90,10 @@ export const login = (credentials) => {
 }
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const loginSuccess = (credentials) => {
+export const loginSuccess = (user) => {
   return {
     type: LOGIN_SUCCESS,
-    credentials
+    user
   }
 }
 export const LOGIN_ERROR = 'LOGIN_ERROR';

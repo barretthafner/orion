@@ -1,10 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-export const NavBar = React.createClass({
+const NavBar = React.createClass({
   render() {
     let navContent;
-    if (!this.props.currentUser) {
+    const state = this.props.state.app;
+    if (!state.user) {
       navContent = (
         <ul className="nav navbar-nav navbar-right">
           <li><Link to={'/login'}>Login</Link></li>
@@ -14,7 +16,8 @@ export const NavBar = React.createClass({
     } else {
       navContent = (
         <ul className="nav navbar-nav navbar-right">
-          <li><Link to={'/user/currentUser._id'}>Signed in as: { currentUser.username }</Link></li>
+          <li><Link to={'/dashboard'}>Dashboard</Link></li>
+          <li><Link to={'/user/currentUser._id'}>Signed in as: { state.user.username }</Link></li>
           <li><Link to={'/logout'}>Logout</Link></li>
         </ul>
       );
@@ -33,3 +36,21 @@ export const NavBar = React.createClass({
     );
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    state: state
+  };
+};
+
+//const mapDispatchToProps = (dispatch) => {
+//  return {
+//    register: (credentials) => {
+//      dispatch(actions.register(credentials));
+//    }
+//  };
+//};
+
+const Container = connect(mapStateToProps)(NavBar);
+export default Container
+

@@ -12,11 +12,11 @@ import { store, history } from './store';
 import { LandingPage } from './components/landingPage';
 import { LoginPage } from './components/loginPage';
 import RegistrationPage from './components/registrationPage';
-import { UserDashboard } from './components/user';
+import UserDashboard from './components/user';
 
 //  -------------------------------------------------------------------
 
-import { NavBar } from './components/nav';
+import NavBar from './components/nav';
 const App = React.createClass({
 
   render() {
@@ -29,6 +29,17 @@ const App = React.createClass({
   }
 });
 
+
+function isAuth(nextState, replace) {
+  const state = store.getState();
+  console.log(state);
+  if (!state.app || !state.app.user) {
+    replace({
+      pathname: '/login'
+    })
+  }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
     <Provider store={store}>
@@ -37,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <IndexRoute component={LandingPage} />
         <Route path='login' component={LoginPage}></Route>
         <Route path='register' component={RegistrationPage}></Route>
-        <Route path='dashboard' component={UserDashboard}></Route>
+        <Route path='dashboard' component={UserDashboard} onEnter={isAuth}></Route>
         </Route>
       </Router>
     </Provider>,

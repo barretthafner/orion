@@ -77,7 +77,11 @@
 	
 	var _user = __webpack_require__(275);
 	
+	var _user2 = _interopRequireDefault(_user);
+	
 	var _nav = __webpack_require__(272);
+	
+	var _nav2 = _interopRequireDefault(_nav);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -89,7 +93,7 @@
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(_nav.NavBar, null),
+	      _react2.default.createElement(_nav2.default, null),
 	      this.props.children
 	    );
 	  }
@@ -98,6 +102,16 @@
 	//  -------------------------------------------------------------------
 	
 	//  -------------------------------------------------------------------
+	
+	function isAuth(nextState, replace) {
+	  var state = _store.store.getState();
+	  console.log(state);
+	  if (!state.app || !state.app.user) {
+	    replace({
+	      pathname: '/login'
+	    });
+	  }
+	};
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  _reactDom2.default.render(_react2.default.createElement(
@@ -112,7 +126,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage.LoginPage }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user.UserDashboard })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user2.default, onEnter: isAuth })
 	      )
 	    )
 	  ), document.getElementById('app'));
@@ -28625,7 +28639,7 @@
 	
 	var initialState = {
 	  app: {
-	    loggedIn: null
+	    user: null
 	  }
 	};
 	
@@ -29037,6 +29051,14 @@
 	
 	var actions = _interopRequireWildcard(_actions);
 	
+	var _reactRouterRedux = __webpack_require__(261);
+	
+	var _store = __webpack_require__(260);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function appReducer() {
@@ -29044,12 +29066,14 @@
 	  var action = arguments[1];
 	
 	
-	  console.log('reducer called! action:', action, 'state:', state);
+	  console.log('reducer called! \naction:', action.type, '\nstate:', state);
 	  switch (action.type) {
 	
 	    case actions.REGISTER_SUCCESS:
-	      console.log('register success: ', action.credentials);
-	      return state;
+	
+	      //      store.dispatch(push('/dashboard'));
+	
+	      return Object.assign({}, state, { user: action.user });
 	
 	    case actions.REGISTER_ERROR:
 	      console.log('register error: ', action.error);
@@ -29085,7 +29109,6 @@
 	        credentials: credentials
 	      })
 	    }).then(function (res) {
-	      console.log(res);
 	      if (res.state < 200 || res.status >= 300) {
 	        var error = new Error(res.statusText);
 	        error.res = res;
@@ -29095,7 +29118,8 @@
 	    }).then(function (res) {
 	      return res.json();
 	    }).then(function (data) {
-	      return dispatch(registerSuccess(data.username));
+	      console.log(data);
+	      return dispatch(registerSuccess(data));
 	    }).catch(function (error) {
 	      return dispatch(registerError(error));
 	    });
@@ -29103,10 +29127,10 @@
 	};
 	
 	var REGISTER_SUCCESS = exports.REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-	var registerSuccess = exports.registerSuccess = function registerSuccess(credentials) {
+	var registerSuccess = exports.registerSuccess = function registerSuccess(user) {
 	  return {
 	    type: REGISTER_SUCCESS,
-	    credentials: credentials
+	    user: user
 	  };
 	};
 	var REGISTER_ERROR = exports.REGISTER_ERROR = 'REGISTER_ERROR';
@@ -29138,7 +29162,7 @@
 	    }).then(function (res) {
 	      return res.json();
 	    }).then(function (data) {
-	      return dispatch(loginSuccess(data.credentials));
+	      return dispatch(loginSuccess(data.user));
 	    }).catch(function (error) {
 	      return dispatch(loginError(error));
 	    });
@@ -29146,10 +29170,10 @@
 	};
 	
 	var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-	var loginSuccess = exports.loginSuccess = function loginSuccess(credentials) {
+	var loginSuccess = exports.loginSuccess = function loginSuccess(user) {
 	  return {
 	    type: LOGIN_SUCCESS,
-	    credentials: credentials
+	    user: user
 	  };
 	};
 	var LOGIN_ERROR = exports.LOGIN_ERROR = 'LOGIN_ERROR';
@@ -29663,21 +29687,23 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.NavBar = undefined;
 	
 	var _react = __webpack_require__(2);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(176);
+	
 	var _reactRouter = __webpack_require__(199);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var NavBar = exports.NavBar = _react2.default.createClass({
+	var NavBar = _react2.default.createClass({
 	  displayName: 'NavBar',
 	  render: function render() {
 	    var navContent = void 0;
-	    if (!this.props.currentUser) {
+	    var state = this.props.state.app;
+	    if (!state.user) {
 	      navContent = _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
@@ -29709,9 +29735,18 @@
 	          null,
 	          _react2.default.createElement(
 	            _reactRouter.Link,
+	            { to: '/dashboard' },
+	            'Dashboard'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/user/currentUser._id' },
 	            'Signed in as: ',
-	            currentUser.username
+	            state.user.username
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -29749,6 +29784,23 @@
 	    );
 	  }
 	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	//const mapDispatchToProps = (dispatch) => {
+	//  return {
+	//    register: (credentials) => {
+	//      dispatch(actions.register(credentials));
+	//    }
+	//  };
+	//};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps)(NavBar);
+	exports.default = Container;
 
 /***/ },
 /* 273 */
@@ -29811,8 +29863,6 @@
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _nav = __webpack_require__(272);
-	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29835,23 +29885,22 @@
 	        'form',
 	        { onSubmit: function onSubmit(event) {
 	            event.preventDefault();
-	            console.log(_this);
-	            //                if(!props.state.user) {
-	            //                  props.register({
-	            //                    username: this.refs.username.value,
-	            //                    password: "testy"
-	            //                  });
-	            //                }
+	            if (!props.state.user) {
+	              props.register({
+	                username: _this.refs.username.value,
+	                password: _this.refs.password.value
+	              });
+	            }
 	          } },
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'email', placeholder: 'email' })
+	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
 	        ),
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'pass', placeholder: 'password' })
+	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
 	        ),
 	        ' (hint: password1)',
 	        _react2.default.createElement('br', null),
@@ -29884,9 +29933,70 @@
 
 /***/ },
 /* 275 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UserDashboard = _react2.default.createClass({
+	  displayName: 'UserDashboard',
+	  render: function render() {
+	    var props = this.props;
+	    var displayState = _react2.default.createElement(
+	      'pre',
+	      null,
+	      _react2.default.createElement(
+	        'code',
+	        null,
+	        JSON.stringify(this.props.state, null, 2)
+	      )
+	    );
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'User Page'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        displayState
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserDashboard);
+	exports.default = Container;
 
 /***/ }
 /******/ ]);

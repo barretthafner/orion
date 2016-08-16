@@ -7,27 +7,24 @@ var express     = require("express"),
 
 
 router.post("/api/register", jsonParser, function(req, res) {
-  res.status(200).json(req.body);
-//  if (req.body.credentials) {
-//    const credentials = req.body.credentials;
-//    const newUser = new User({username: credentials.username});
-//    User.register(newUser, credentials.password, function(err, user){
-//      if(err){
-//        req.flash("error", err.message);
-//        res.status(500).json(err);
-//      } else {
-//        user.starScore = 0;
-//        user.list.push({title: "Make a List!", starValue: 1});
-//        user.save();
-//        passport.authenticate("local")(req, res, function(){
-//        console.log("bamm!");
-//          req.flash("success", "Welcome to Orion " + user.username + "!");
-//          res.status(201).json(user.username);
-//        });
-//      }
-//    });
-//  }
-//  res.status(400);
+//  res.status(200).json(req.body);
+  if (req.body.credentials) {
+    const credentials = req.body.credentials;
+    const newUser = new User({username: credentials.username});
+    User.register(newUser, credentials.password, function(err, user){
+      if(err){
+        res.status(500).json(err);
+      } else {
+        user.starScore = 0;
+        user.list.push({title: "Make a List!", starValue: 1});
+        user.save();
+        user.authenticate(credentials.password, function(){
+          res.status(200).json(user);
+        });
+      }
+    });
+  }
+  res.status(400);
 });
 
 // login route

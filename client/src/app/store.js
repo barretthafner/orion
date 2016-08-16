@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
 
 const initialState = {
   app: {
-    loggedIn: null
+    user: null
   }
 };
 

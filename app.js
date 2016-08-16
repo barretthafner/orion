@@ -10,9 +10,9 @@ var express         = require("express"),
 //    bodyParser      = require("body-parser"),
 //    methodOverride  = require("method-override"),
 //    flash           = require("connect-flash"),
-//    session         = require("express-session"),
-//    passport        = require("passport"),
-//    LocalStrategy   = require("passport-local"),
+    session         = require("express-session"),
+    passport        = require("passport"),
+    LocalStrategy   = require("passport-local"),
     app             = express();
 
 
@@ -30,21 +30,21 @@ if (process.argv.indexOf("--seed") > -1) {
 // Configure packages ---------------------------------------------------------
 //app.use(methodOverride("_method"));
 //app.use(flash());
-//app.use(session({
-//    secret: "This is a secret...easily hackable",
-//    resave: false,
-//    saveUninitialized: false
-//}));
-//app.use(passport.initialize());
-//app.use(passport.session());
+app.use(session({
+    secret: "This is a secret...easily hackable",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Add models -----------------------------------------------------------------
-//var User = require("./server/models/User");
+var User = require("./server/models/User");
 
 // Passport configuration -----------------------------------------------------
-//passport.use(new LocalStrategy(User.authenticate()));
-//passport.serializeUser(User.serializeUser());
-//passport.deserializeUser(User.deserializeUser());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Add middleware -------------------------------------------------------------
 //app.use(function(req, res, next){
@@ -60,6 +60,10 @@ app.use(require("./server/api/auth"));
 
 // Serve React App -------------------------------------------------------------------
 app.use(express.static(__dirname + "/client/dist"));
+
+app.get('*', function(req, res) {
+  res.sendFile(__dirname + "/client/dist/index.html");
+});
 
 // Listen ---------------------------------------------------------------------
 app.listen(process.env.PORT, process.env.IP, function(){
