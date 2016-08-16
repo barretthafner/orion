@@ -12,6 +12,7 @@ import { store, history } from './store';
 import { LandingPage } from './components/landingPage';
 import { LoginPage } from './components/loginPage';
 import RegistrationPage from './components/registrationPage';
+import { UserDashboard } from './components/user';
 
 //  -------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <IndexRoute component={LandingPage} />
         <Route path='login' component={LoginPage}></Route>
         <Route path='register' component={RegistrationPage}></Route>
+        <Route path='dashboard' component={UserDashboard}></Route>
         </Route>
       </Router>
     </Provider>,

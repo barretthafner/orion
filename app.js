@@ -6,8 +6,8 @@
 // Initialize -----------------------------------------------------------------
 // Require packages
 var express         = require("express"),
-    bodyParser      = require("body-parser"),
     mongoose        = require("mongoose"),
+//    bodyParser      = require("body-parser"),
 //    methodOverride  = require("method-override"),
 //    flash           = require("connect-flash"),
 //    session         = require("express-session"),

@@ -75,6 +75,8 @@
 	
 	var _registrationPage2 = _interopRequireDefault(_registrationPage);
 	
+	var _user = __webpack_require__(275);
+	
 	var _nav = __webpack_require__(272);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -109,7 +111,8 @@
 	        { path: '/', component: App },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage.LoginPage }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user.UserDashboard })
 	      )
 	    )
 	  ), document.getElementById('app'));
@@ -29878,6 +29881,12 @@
 	
 	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RegistrationPage);
 	exports.default = Container;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports) {
+
+	"use strict";
 
 /***/ }
 /******/ ]);
