@@ -73,25 +73,35 @@
 	
 	var _landingPage = __webpack_require__(271);
 	
-	var _loginPage = __webpack_require__(273);
+	var _landingPage2 = _interopRequireDefault(_landingPage);
+	
+	var _loginPage = __webpack_require__(272);
 	
 	var _loginPage2 = _interopRequireDefault(_loginPage);
 	
-	var _registrationPage = __webpack_require__(274);
+	var _registrationPage = __webpack_require__(273);
 	
 	var _registrationPage2 = _interopRequireDefault(_registrationPage);
 	
-	var _user = __webpack_require__(275);
+	var _dashboard = __webpack_require__(274);
 	
-	var _user2 = _interopRequireDefault(_user);
+	var _dashboard2 = _interopRequireDefault(_dashboard);
 	
-	var _nav = __webpack_require__(272);
+	var _state = __webpack_require__(275);
+	
+	var _state2 = _interopRequireDefault(_state);
+	
+	var _nav = __webpack_require__(276);
 	
 	var _nav2 = _interopRequireDefault(_nav);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	//  -------------------------------------------------------------------
+	
+	//  -------------------------------------------------------------------
 	
 	var App = _react2.default.createClass({
 	  displayName: 'App',
@@ -104,10 +114,6 @@
 	    );
 	  }
 	});
-	
-	//  -------------------------------------------------------------------
-	
-	//  -------------------------------------------------------------------
 	
 	//  -------------------------------------------------------------------
 	
@@ -133,11 +139,12 @@
 	      _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: App },
-	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
+	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'logout', onEnter: handleOnLogout }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user2.default, onEnter: requireAuth })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _dashboard2.default, onEnter: requireAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'state', component: _state2.default })
 	      )
 	    )
 	  ), document.getElementById('app'));
@@ -29696,42 +29703,436 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.LandingPage = undefined;
 	
 	var _react = __webpack_require__(2);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _nav = __webpack_require__(272);
+	var _reactRedux = __webpack_require__(176);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var LandingPage = exports.LandingPage = _react2.default.createClass({
+	var LandingPage = _react2.default.createClass({
 	  displayName: 'LandingPage',
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'jumbotron' },
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'jumbotron' },
+	        'h1',
+	        null,
+	        'Welcome to Orion'
+	      ),
+	      _react2.default.createElement(
+	        'h3',
+	        null,
+	        'An app to help you get things done with your friends.'
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps)(LandingPage);
+	exports.default = Container;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	var _reactRouterRedux = __webpack_require__(261);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LoginPage = _react2.default.createClass({
+	  displayName: 'LoginPage',
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.state.app.user) {
+	      this.props.changeLocation('/dashboard');
+	    }
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var props = this.props;
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'Login'
+	      ),
+	      _react2.default.createElement(
+	        'form',
+	        { onSubmit: function onSubmit(event) {
+	            event.preventDefault();
+	            props.login({
+	              username: _this.refs.username.value,
+	              password: _this.refs.password.value
+	            });
+	          } },
 	        _react2.default.createElement(
-	          'h1',
+	          'label',
 	          null,
-	          'Welcome to Orion'
+	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
 	        ),
 	        _react2.default.createElement(
-	          'h3',
+	          'label',
 	          null,
-	          'An app to help you get things done with your friends.'
+	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit' },
+	          'Login'
 	        )
 	      )
 	    );
 	  }
 	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    login: function login(credentials) {
+	      dispatch(actions.login(credentials));
+	    },
+	    changeLocation: function changeLocation(nextPathname) {
+	      dispatch((0, _reactRouterRedux.push)(nextPathname));
+	    }
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginPage);
+	exports.default = Container;
 
 /***/ },
-/* 272 */
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	var _reactRouterRedux = __webpack_require__(261);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var RegistrationPage = _react2.default.createClass({
+	  displayName: 'RegistrationPage',
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.state.app.user) {
+	      this.props.changeLocation('/dashboard');
+	    }
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var props = this.props;
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'Sign Up'
+	      ),
+	      _react2.default.createElement(
+	        'form',
+	        { onSubmit: function onSubmit(event) {
+	            event.preventDefault();
+	            if (!props.state.user) {
+	              props.register({
+	                username: _this.refs.username.value,
+	                password: _this.refs.password.value
+	              });
+	            }
+	          } },
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
+	        ),
+	        ' (hint: password1)',
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit' },
+	          'Submit'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    register: function register(credentials) {
+	      dispatch(actions.register(credentials));
+	    },
+	    changeLocation: function changeLocation(nextPathname) {
+	      dispatch((0, _reactRouterRedux.push)(nextPathname));
+	    }
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RegistrationPage);
+	exports.default = Container;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Dashboard = _react2.default.createClass({
+	  displayName: 'Dashboard',
+	  render: function render() {
+	    var user = this.props.state.app.user;
+	
+	    var friendsList = void 0;
+	    if (user.friends) {
+	      friendsList = user.friends.map(function (item, index) {
+	        _react2.default.createElement(
+	          'li',
+	          { className: 'list-group-item' },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            item.username
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Status: ',
+	            item.status
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'btn btn-warning' },
+	            'Remove Friend'
+	          )
+	        );
+	      });
+	    }
+	
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-8' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'lead' },
+	            user.username,
+	            '\'s List'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'list-group' },
+	            user.list.map(function (item, index) {
+	              return _react2.default.createElement(
+	                'li',
+	                { className: 'list-group-item', key: index },
+	                item.title
+	              );
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-4' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'lead' },
+	            'Star Score'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'list-group' },
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'list-group-item' },
+	              user.starScore
+	            )
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-12' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'lead' },
+	            'Friends'
+	          ),
+	          _react2.default.createElement(
+	            'a',
+	            { className: 'btn btn-primary', href: '/user/' },
+	            'Find More Friends'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'list-group' },
+	            friendsList
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Dashboard);
+	exports.default = Container;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var AppState = _react2.default.createClass({
+	  displayName: 'AppState',
+	  render: function render() {
+	    var props = this.props;
+	    var displayState = _react2.default.createElement(
+	      'pre',
+	      null,
+	      _react2.default.createElement(
+	        'code',
+	        null,
+	        JSON.stringify(this.props.state, null, 2)
+	      )
+	    );
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'App State'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        displayState
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps)(AppState);
+	exports.default = Container;
+
+/***/ },
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29835,265 +30236,6 @@
 	};
 	
 	var Container = (0, _reactRedux.connect)(mapStateToProps)(NavBar);
-	exports.default = Container;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(176);
-	
-	var _reactRouterRedux = __webpack_require__(261);
-	
-	var _actions = __webpack_require__(268);
-	
-	var actions = _interopRequireWildcard(_actions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var LoginPage = _react2.default.createClass({
-	  displayName: 'LoginPage',
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if (nextProps.state.app.user) {
-	      this.props.changeLocation('/dashboard');
-	    }
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var props = this.props;
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'container well' },
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Login'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        { onSubmit: function onSubmit(event) {
-	            event.preventDefault();
-	            props.login({
-	              username: _this.refs.username.value,
-	              password: _this.refs.password.value
-	            });
-	          } },
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
-	        ),
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit' },
-	          'Login'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    state: state
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    login: function login(credentials) {
-	      dispatch(actions.login(credentials));
-	    },
-	    changeLocation: function changeLocation(nextPathname) {
-	      dispatch((0, _reactRouterRedux.push)(nextPathname));
-	    }
-	  };
-	};
-	
-	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginPage);
-	exports.default = Container;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(176);
-	
-	var _reactRouterRedux = __webpack_require__(261);
-	
-	var _actions = __webpack_require__(268);
-	
-	var actions = _interopRequireWildcard(_actions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var RegistrationPage = _react2.default.createClass({
-	  displayName: 'RegistrationPage',
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if (nextProps.state.app.user) {
-	      this.props.changeLocation('/dashboard');
-	    }
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var props = this.props;
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'container well' },
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Sign Up'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        { onSubmit: function onSubmit(event) {
-	            event.preventDefault();
-	            if (!props.state.user) {
-	              props.register({
-	                username: _this.refs.username.value,
-	                password: _this.refs.password.value
-	              });
-	            }
-	          } },
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
-	        ),
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
-	        ),
-	        ' (hint: password1)',
-	        _react2.default.createElement('br', null),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit' },
-	          'Submit'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    state: state
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    register: function register(credentials) {
-	      dispatch(actions.register(credentials));
-	    },
-	    changeLocation: function changeLocation(nextPathname) {
-	      dispatch((0, _reactRouterRedux.push)(nextPathname));
-	    }
-	  };
-	};
-	
-	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RegistrationPage);
-	exports.default = Container;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(176);
-	
-	var _actions = __webpack_require__(268);
-	
-	var actions = _interopRequireWildcard(_actions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var UserDashboard = _react2.default.createClass({
-	  displayName: 'UserDashboard',
-	  render: function render() {
-	    var props = this.props;
-	    var displayState = _react2.default.createElement(
-	      'pre',
-	      null,
-	      _react2.default.createElement(
-	        'code',
-	        null,
-	        JSON.stringify(this.props.state, null, 2)
-	      )
-	    );
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'container well' },
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'User Page'
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        null,
-	        displayState
-	      )
-	    );
-	  }
-	});
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    state: state
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
-	};
-	
-	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserDashboard);
 	exports.default = Container;
 
 /***/ }

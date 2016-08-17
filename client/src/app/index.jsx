@@ -10,10 +10,11 @@ import * as actions from './actions';
 
 //  -------------------------------------------------------------------
 
-import { LandingPage } from './components/landingPage';
+import LandingPage from './components/landingPage';
 import LoginPage from './components/loginPage';
 import RegistrationPage from './components/registrationPage';
-import UserDashboard from './components/user';
+import Dashboard from './components/dashboard';
+import AppState from './components/state';
 
 //  -------------------------------------------------------------------
 
@@ -52,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <Route path='login' component={LoginPage}></Route>
         <Route path='register' component={RegistrationPage}></Route>
         <Route path='logout' onEnter={handleOnLogout}></Route>
-        <Route path='dashboard' component={UserDashboard} onEnter={requireAuth}></Route>
+        <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
+        <Route path='state' component={AppState}></Route>
         </Route>
       </Router>
     </Provider>,
