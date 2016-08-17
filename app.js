@@ -7,7 +7,6 @@
 // Require packages
 var express         = require("express"),
     mongoose        = require("mongoose"),
-//    bodyParser      = require("body-parser"),
 //    methodOverride  = require("method-override"),
 //    flash           = require("connect-flash"),
     session         = require("express-session"),
@@ -56,7 +55,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // Add routes -----------------------------------------------------------------
 app.use(require("./server/api/auth"));
-//app.use(require("./api/user"));
+app.use(require("./server/api/userData"));
 
 // Serve React App -------------------------------------------------------------------
 app.use(express.static(__dirname + "/client/dist"));

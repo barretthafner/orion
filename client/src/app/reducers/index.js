@@ -17,14 +17,21 @@ export default function appReducer(state = {}, action) {
       return Object.assign({}, state, {user: action.user});
 
     case actions.LOGIN_ERROR:
-      console.log('register error: ', action.error);
+      console.log('login error: ', action.error);
       return state;
 
     case actions.LOGOUT_SUCCESS:
-      return Object.assign({}, state, {user: null});
+      return Object.assign({}, state, {user: null, usersList: null});
 
     case actions.LOGOUT_ERROR:
-      console.log('register error: ', action.error);
+      console.log('logout error: ', action.error);
+      return state;
+
+    case actions.GET_USERS_LIST_SUCCESS:
+      return Object.assign({}, state, {usersList: action.usersList});
+
+    case actions.GET_USERS_LIST_ERROR:
+      console.log('getUsersList error: ', action.error);
       return state;
 
     default:

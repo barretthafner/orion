@@ -15,6 +15,7 @@ import LoginPage from './components/loginPage';
 import RegistrationPage from './components/registrationPage';
 import Dashboard from './components/dashboard';
 import AppState from './components/state';
+import UsersIndex from './components/usersList';
 
 //  -------------------------------------------------------------------
 
@@ -44,6 +45,12 @@ function handleOnLogout(nextState, replace) {
   replace('/');
 }
 
+function handleUserDelete(nextState, replace) {
+  store.dispatch(actions.deleteCurrentUser());
+  replace('/');
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
     <Provider store={store}>
@@ -52,8 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
           <IndexRoute component={LandingPage} />
           <Route path='login' component={LoginPage}></Route>
           <Route path='register' component={RegistrationPage}></Route>
-          <Route path='logout' onEnter={handleOnLogout}></Route>
+          <Route path='logout' onEnter={handleOnLogout} onEnter={requireAuth}></Route>
           <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
+          <Route path='users' component={UsersIndex}  onEnter={requireAuth}></Route>
+          <Route path='delete' onEnter={handleUserDelete} onEnter={requireAuth}></Route>
           <Route path='state' component={AppState}></Route>
         </Route>
       </Router>

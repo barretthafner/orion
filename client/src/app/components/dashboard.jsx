@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import * as actions from '../actions';
 
 const Dashboard = React.createClass({
@@ -38,7 +39,7 @@ const Dashboard = React.createClass({
         <div className="row">
           <div className="col-md-12">
             <p className="lead">Friendships</p>
-            <a className="btn btn-primary" href="/user/">Find More Friends</a>
+            <Link className="btn btn-primary" to={'/users'}>Find More Friends</Link>
             <div className="list-group">
               {friendshipsList}
             </div>

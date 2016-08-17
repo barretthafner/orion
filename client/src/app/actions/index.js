@@ -143,3 +143,87 @@ export const logoutError = (error) => {
   }
 }
 
+export const getUsersList = () => {
+  return (dispatch) => {
+    const url = '/api/user';
+    return fetch(url)
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+        return res;
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return dispatch(
+          getUsersListSuccess(data)
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          getUsersListError(error)
+        );
+      });
+  }
+}
+
+export const GET_USERS_LIST_SUCCESS = 'GET_USERS_LIST_SUCCESS';
+export const getUsersListSuccess = (usersList) => {
+  return {
+    type: GET_USERS_LIST_SUCCESS,
+    usersList
+  }
+}
+export const GET_USERS_LIST_ERROR = 'GET_USERS_LIST_ERROR';
+export const getUsersListError = (error) => {
+  return {
+    type: GET_USERS_LIST_ERROR,
+    error
+  }
+}
+
+export const deleteCurrentUser = (user) => {
+  return (dispatch) => {
+    const url = '/api/user/' + user.id;
+    return fetch(url, {
+        method: 'delete'
+    })
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+      })
+      .then(() => {
+        return dispatch(
+          deleteCurrentUserSuccess()
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          deleteCurrentUserError(error)
+        );
+      });
+  }
+}
+
+export const _SUCCESS = '_SUCCESS';
+export const deleteCurrentUserSuccess = () => {
+  return {
+    type: _SUCCESS,
+
+  }
+}
+export const _ERROR = '_ERROR';
+export const deleteCurrentUserError = (error) => {
+  return {
+    type: _ERROR,
+    error
+  }
+}
+

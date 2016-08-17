@@ -5,16 +5,16 @@ var express     = require("express"),
     User        = require("../models/User");
 
 function composeUserData(user) {
-  let friendships;
-  User.getFriends(user, function(err, friends){
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(friends);
-      console.log('bammmmm!');
-      friendships = friends;
-    }
-  })
+//  let friendships;
+//  User.getFriends(user, function(err, friends){
+//    if (err) {
+//      console.log(err);
+//    } else {
+//      console.log(friends);
+//      console.log('bammmmm!');
+//      friendships = friends;
+//    }
+//  })
 
   return {
     username: user.username,
@@ -22,7 +22,7 @@ function composeUserData(user) {
     email: user.email || null,
     starScore: user.starScore,
     list: user.list,
-    friendships: friendships
+    friendships: []
   }
 }
 

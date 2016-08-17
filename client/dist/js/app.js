@@ -91,13 +91,21 @@
 	
 	var _state2 = _interopRequireDefault(_state);
 	
-	var _nav = __webpack_require__(276);
+	var _usersList = __webpack_require__(276);
+	
+	var _usersList2 = _interopRequireDefault(_usersList);
+	
+	var _nav = __webpack_require__(277);
 	
 	var _nav2 = _interopRequireDefault(_nav);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	//  -------------------------------------------------------------------
 	
 	//  -------------------------------------------------------------------
 	
@@ -115,8 +123,6 @@
 	  }
 	});
 	
-	//  -------------------------------------------------------------------
-	
 	function requireAuth(nextState, replace) {
 	  var state = _store.store.getState();
 	  if (!state.app.user) {
@@ -126,6 +132,11 @@
 	
 	function handleOnLogout(nextState, replace) {
 	  _store.store.dispatch(actions.logout());
+	  replace('/');
+	}
+	
+	function handleUserDelete(nextState, replace) {
+	  _store.store.dispatch(actions.deleteCurrentUser());
 	  replace('/');
 	}
 	
@@ -142,8 +153,10 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'logout', onEnter: handleOnLogout }),
+	        _react2.default.createElement(_reactRouter.Route, _defineProperty({ path: 'logout', onEnter: handleOnLogout }, 'onEnter', requireAuth)),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _dashboard2.default, onEnter: requireAuth }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'users', component: _usersList2.default, onEnter: requireAuth }),
+	        _react2.default.createElement(_reactRouter.Route, _defineProperty({ path: 'delete', onEnter: handleUserDelete }, 'onEnter', requireAuth)),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'state', component: _state2.default })
 	      )
 	    )
@@ -28657,25 +28670,31 @@
 	
 	var initialState = {
 	  app: {
-	    "user": {
-	      "username": "testy",
-	      "id": "57b3ad512b30860c4f7946ac",
-	      "email": "testy@orionapp.com",
-	      "starScore": 6,
-	      "list": [{
-	        "title": "test orion",
-	        "starValue": 1,
-	        "_id": "57b3ad522b30860c4f7946b5"
-	      }, {
-	        "title": "make a friend",
-	        "starValue": 2,
-	        "_id": "57b3ad522b30860c4f7946b4"
-	      }, {
-	        "title": "find love",
-	        "starValue": 3,
-	        "_id": "57b3ad522b30860c4f7946b3"
-	      }]
-	    }
+	    "user": null,
+	    //    {
+	    //      "username": "testy",
+	    //      "id": "57b3ad512b30860c4f7946ac",
+	    //      "email": "testy@orionapp.com",
+	    //      "starScore": 6,
+	    //      "list": [
+	    //        {
+	    //          "title": "test orion",
+	    //          "starValue": 1,
+	    //          "_id": "57b3ad522b30860c4f7946b5"
+	    //        },
+	    //        {
+	    //          "title": "make a friend",
+	    //          "starValue": 2,
+	    //          "_id": "57b3ad522b30860c4f7946b4"
+	    //        },
+	    //        {
+	    //          "title": "find love",
+	    //          "starValue": 3,
+	    //          "_id": "57b3ad522b30860c4f7946b3"
+	    //        }
+	    //      ]
+	    //    },
+	    usersList: []
 	  }
 	};
 	
@@ -29114,14 +29133,21 @@
 	      return Object.assign({}, state, { user: action.user });
 	
 	    case actions.LOGIN_ERROR:
-	      console.log('register error: ', action.error);
+	      console.log('login error: ', action.error);
 	      return state;
 	
 	    case actions.LOGOUT_SUCCESS:
-	      return Object.assign({}, state, { user: null });
+	      return Object.assign({}, state, { user: null, usersList: null });
 	
 	    case actions.LOGOUT_ERROR:
-	      console.log('register error: ', action.error);
+	      console.log('logout error: ', action.error);
+	      return state;
+	
+	    case actions.GET_USERS_LIST_SUCCESS:
+	      return Object.assign({}, state, { usersList: action.usersList });
+	
+	    case actions.GET_USERS_LIST_ERROR:
+	      console.log('getUsersList error: ', action.error);
 	      return state;
 	
 	    default:
@@ -29138,7 +29164,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.deleteCurrentUserError = exports._ERROR = exports.deleteCurrentUserSuccess = exports._SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29257,6 +29283,75 @@
 	var logoutError = exports.logoutError = function logoutError(error) {
 	  return {
 	    type: LOGOUT_ERROR,
+	    error: error
+	  };
+	};
+	
+	var getUsersList = exports.getUsersList = function getUsersList() {
+	  return function (dispatch) {
+	    var url = '/api/user';
+	    return fetch(url).then(function (res) {
+	      if (res.state < 200 || res.status >= 300) {
+	        var error = new Error(res.statusText);
+	        error.res = res;
+	        throw error;
+	      }
+	      return res;
+	    }).then(function (res) {
+	      return res.json();
+	    }).then(function (data) {
+	      return dispatch(getUsersListSuccess(data));
+	    }).catch(function (error) {
+	      return dispatch(getUsersListError(error));
+	    });
+	  };
+	};
+	
+	var GET_USERS_LIST_SUCCESS = exports.GET_USERS_LIST_SUCCESS = 'GET_USERS_LIST_SUCCESS';
+	var getUsersListSuccess = exports.getUsersListSuccess = function getUsersListSuccess(usersList) {
+	  return {
+	    type: GET_USERS_LIST_SUCCESS,
+	    usersList: usersList
+	  };
+	};
+	var GET_USERS_LIST_ERROR = exports.GET_USERS_LIST_ERROR = 'GET_USERS_LIST_ERROR';
+	var getUsersListError = exports.getUsersListError = function getUsersListError(error) {
+	  return {
+	    type: GET_USERS_LIST_ERROR,
+	    error: error
+	  };
+	};
+	
+	var deleteCurrentUser = exports.deleteCurrentUser = function deleteCurrentUser(user) {
+	  return function (dispatch) {
+	    var url = '/api/user/' + user.id;
+	    return fetch(url, {
+	      method: 'delete'
+	    }).then(function (res) {
+	      if (res.state < 200 || res.status >= 300) {
+	        var error = new Error(res.statusText);
+	        error.res = res;
+	        throw error;
+	      }
+	    }).then(function () {
+	      return dispatch(deleteCurrentUserSuccess());
+	    }).catch(function (error) {
+	      return dispatch(deleteCurrentUserError(error));
+	    });
+	  };
+	};
+	
+	var _SUCCESS = exports._SUCCESS = '_SUCCESS';
+	var deleteCurrentUserSuccess = exports.deleteCurrentUserSuccess = function deleteCurrentUserSuccess() {
+	  return {
+	    type: _SUCCESS
+	
+	  };
+	};
+	var _ERROR = exports._ERROR = '_ERROR';
+	var deleteCurrentUserError = exports.deleteCurrentUserError = function deleteCurrentUserError(error) {
+	  return {
+	    type: _ERROR,
 	    error: error
 	  };
 	};
@@ -29967,6 +30062,8 @@
 	
 	var _reactRedux = __webpack_require__(176);
 	
+	var _reactRouter = __webpack_require__(199);
+	
 	var _actions = __webpack_require__(268);
 	
 	var actions = _interopRequireWildcard(_actions);
@@ -30064,8 +30161,8 @@
 	            'Friendships'
 	          ),
 	          _react2.default.createElement(
-	            'a',
-	            { className: 'btn btn-primary', href: '/user/' },
+	            _reactRouter.Link,
+	            { className: 'btn btn-primary', to: '/users' },
 	            'Find More Friends'
 	          ),
 	          _react2.default.createElement(
@@ -30172,6 +30269,102 @@
 
 /***/ },
 /* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(176);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UsersIndex = _react2.default.createClass({
+	  displayName: 'UsersIndex',
+	  componentDidMount: function componentDidMount() {
+	    this.props.getUsersList();
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var props = this.props;
+	    var currentUserId = this.props.state.app.user.id;
+	    var users = this.props.state.app.usersList;
+	
+	    var userElements = [];
+	
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'container well' },
+	      _react2.default.createElement(
+	        'h1',
+	        { className: 'row text-center' },
+	        'Find your friends!'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row text-center' },
+	        users.map(function (user, index) {
+	          return user.id === currentUserId ? null : _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-4', key: index },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              user.username
+	            ),
+	            _react2.default.createElement(
+	              'form',
+	              { onSubmit: function onSubmit() {
+	                  return _this.props.sendFriendRequest(user);
+	                } },
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'btn btn-primary' },
+	                'Request Friendship'
+	              )
+	            )
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    getUsersList: function getUsersList() {
+	      dispatch(actions.getUsersList());
+	    },
+	    sendFriendRequest: function sendFriendRequest(user) {
+	      dispatch(actions.sendFriendRequest(user));
+	    }
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersIndex);
+	exports.default = Container;
+
+/***/ },
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

@@ -12,6 +12,7 @@ var UserSchema = new mongoose.Schema({
     }],
 });
 
-UserSchema.plugin(friends({pathName: "orionFriends"}));
+
+UserSchema.plugin(friends());
 UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User", UserSchema);
