@@ -19,6 +19,7 @@ router.post("/api/register", jsonParser, function(req, res) {
         user.list.push({title: "Make a List!", starValue: 1});
         user.save();
         user.authenticate(credentials.password, function(){
+          console.log("Added User: " + user.username);
           res.status(200).json(user);
         });
       }
@@ -29,14 +30,13 @@ router.post("/api/register", jsonParser, function(req, res) {
 
 // login route
 router.post('/api/login', jsonParser, function(req, res, next) {
-  res.status(200).json(req.body);
+  console.log(req.body);
 //  passport.authenticate('local', function(err, user, info) {
+//    console.log(user);
 //    if (err) {
-//        req.flash("error", info.message);
 //        return next(err);
 //    }
 //    if (!user) {
-//        req.flash("error", info.message);
 //        return res.redirect('/login');
 //    } else {
 //        req.logIn(user, function(err) {

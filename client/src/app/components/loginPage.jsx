@@ -1,17 +1,49 @@
 import React from 'react';
-import { NavBar } from './nav';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import * as actions from '../actions';
 
-export const LoginPage = React.createClass({
+const LoginPage = React.createClass({
   render() {
+    const props = this.props;
     return (
       <div className="container well">
         <h1>Login</h1>
-        <form action="/api/login" method="POST">
-          <input type="text" name="username" placeholder="username" />
-          <input type="password" name="password" placeholder="password" />
-          <input type="submit" value="Login" />
+        <form onSubmit={
+          (event) => {
+            event.preventDefault();
+            props.login({
+              username: this.refs.username.value,
+              password: this.refs.password.value
+            })
+          }
+        }>
+          <label><input ref="username" placeholder="username" /></label>
+          <label><input ref="password" placeholder="password" /></label>
+          <button type="submit">Login</button>
         </form>
       </div>
     );
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    state: state
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (credentials) => {
+      dispatch(actions.login(credentials));
+    },
+    changeLocation: (nextPathname) => {
+      console.log(nextPathname);
+      dispatch(push(nextPathname));
+    },
+  };
+};
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default Container

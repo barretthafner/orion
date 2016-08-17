@@ -1,5 +1,4 @@
 import * as actions from '../actions';
-import { push } from 'react-router-redux';
 import store from '../store';
 
 export default function appReducer(state = {}, action) {
@@ -8,8 +7,6 @@ export default function appReducer(state = {}, action) {
   switch (action.type) {
 
     case actions.REGISTER_SUCCESS:
-
-//      store.dispatch(push('/dashboard'));
 
       return Object.assign({}, state, {user: action.user});
 

@@ -1,8 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import * as actions from '../actions';
 
 const RegistrationPage = React.createClass({
+
+  componentWillReceiveProps(nextProps) {
+    // user signed in or signed up, assuming redux. you may use this elsewhere.
+    console.log(nextProps);
+    if (nextProps.state.app.user) {
+         this.props.changeLocation('/dashboard');
+    }
+  },
 
   render() {
     const props = this.props;
@@ -39,7 +48,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     register: (credentials) => {
       dispatch(actions.register(credentials));
-    }
+    },
+    changeLocation: (nextPathname) => {
+      console.log(nextPathname);
+      dispatch(push(nextPathname));
+    },
   };
 };
 

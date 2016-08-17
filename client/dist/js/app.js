@@ -71,6 +71,8 @@
 	
 	var _loginPage = __webpack_require__(273);
 	
+	var _loginPage2 = _interopRequireDefault(_loginPage);
+	
 	var _registrationPage = __webpack_require__(274);
 	
 	var _registrationPage2 = _interopRequireDefault(_registrationPage);
@@ -103,10 +105,10 @@
 	
 	//  -------------------------------------------------------------------
 	
-	function isAuth(nextState, replace) {
+	function requireAuth(nextState, replace) {
 	  var state = _store.store.getState();
 	  console.log(state);
-	  if (!state.app || !state.app.user) {
+	  if (!state.app.user) {
 	    replace({
 	      pathname: '/login'
 	    });
@@ -124,9 +126,9 @@
 	        _reactRouter.Route,
 	        { path: '/', component: App },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage.LoginPage }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user2.default, onEnter: isAuth })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user2.default, onEnter: requireAuth })
 	      )
 	    )
 	  ), document.getElementById('app'));
@@ -29051,8 +29053,6 @@
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _reactRouterRedux = __webpack_require__(261);
-	
 	var _store = __webpack_require__(260);
 	
 	var _store2 = _interopRequireDefault(_store);
@@ -29070,8 +29070,6 @@
 	  switch (action.type) {
 	
 	    case actions.REGISTER_SUCCESS:
-	
-	      //      store.dispatch(push('/dashboard'));
 	
 	      return Object.assign({}, state, { user: action.user });
 	
@@ -29162,7 +29160,7 @@
 	    }).then(function (res) {
 	      return res.json();
 	    }).then(function (data) {
-	      return dispatch(loginSuccess(data.user));
+	      return dispatch(loginSuccess(data));
 	    }).catch(function (error) {
 	      return dispatch(loginError(error));
 	    });
@@ -29811,19 +29809,29 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.LoginPage = undefined;
 	
 	var _react = __webpack_require__(2);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _nav = __webpack_require__(272);
+	var _reactRedux = __webpack_require__(176);
+	
+	var _reactRouterRedux = __webpack_require__(261);
+	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var LoginPage = exports.LoginPage = _react2.default.createClass({
+	var LoginPage = _react2.default.createClass({
 	  displayName: 'LoginPage',
 	  render: function render() {
+	    var _this = this;
+	
+	    var props = this.props;
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'container well' },
@@ -29834,14 +29842,53 @@
 	      ),
 	      _react2.default.createElement(
 	        'form',
-	        { action: '/api/login', method: 'POST' },
-	        _react2.default.createElement('input', { type: 'text', name: 'username', placeholder: 'username' }),
-	        _react2.default.createElement('input', { type: 'password', name: 'password', placeholder: 'password' }),
-	        _react2.default.createElement('input', { type: 'submit', value: 'Login' })
+	        { onSubmit: function onSubmit(event) {
+	            event.preventDefault();
+	            props.login({
+	              username: _this.refs.username.value,
+	              password: _this.refs.password.value
+	            });
+	          } },
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit' },
+	          'Login'
+	        )
 	      )
 	    );
 	  }
 	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    state: state
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    login: function login(credentials) {
+	      dispatch(actions.login(credentials));
+	    },
+	    changeLocation: function changeLocation(nextPathname) {
+	      console.log(nextPathname);
+	      dispatch((0, _reactRouterRedux.push)(nextPathname));
+	    }
+	  };
+	};
+	
+	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginPage);
+	exports.default = Container;
 
 /***/ },
 /* 274 */
@@ -29859,6 +29906,8 @@
 	
 	var _reactRedux = __webpack_require__(176);
 	
+	var _reactRouterRedux = __webpack_require__(261);
+	
 	var _actions = __webpack_require__(268);
 	
 	var actions = _interopRequireWildcard(_actions);
@@ -29869,6 +29918,13 @@
 	
 	var RegistrationPage = _react2.default.createClass({
 	  displayName: 'RegistrationPage',
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    // user signed in or signed up, assuming redux. you may use this elsewhere.
+	    console.log(nextProps);
+	    if (nextProps.state.app.user) {
+	      this.props.changeLocation('/dashboard');
+	    }
+	  },
 	  render: function render() {
 	    var _this = this;
 	
@@ -29924,6 +29980,10 @@
 	  return {
 	    register: function register(credentials) {
 	      dispatch(actions.register(credentials));
+	    },
+	    changeLocation: function changeLocation(nextPathname) {
+	      console.log(nextPathname);
+	      dispatch((0, _reactRouterRedux.push)(nextPathname));
 	    }
 	  };
 	};

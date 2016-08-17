@@ -78,7 +78,7 @@ export const login = (credentials) => {
       })
       .then((data) => {
         return dispatch(
-          loginSuccess(data.user)
+          loginSuccess(data)
         );
       })
       .catch((error) => {

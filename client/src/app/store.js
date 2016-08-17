@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { routerReducer, syncHistoryWithStore } from 'react-router-redux';
+import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import ReduxThunk from 'redux-thunk';
 

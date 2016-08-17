@@ -10,7 +10,7 @@ import { store, history } from './store';
 //  -------------------------------------------------------------------
 
 import { LandingPage } from './components/landingPage';
-import { LoginPage } from './components/loginPage';
+import LoginPage from './components/loginPage';
 import RegistrationPage from './components/registrationPage';
 import UserDashboard from './components/user';
 
@@ -30,10 +30,10 @@ const App = React.createClass({
 });
 
 
-function isAuth(nextState, replace) {
+function requireAuth(nextState, replace) {
   const state = store.getState();
   console.log(state);
-  if (!state.app || !state.app.user) {
+  if (!state.app.user) {
     replace({
       pathname: '/login'
     })
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <IndexRoute component={LandingPage} />
         <Route path='login' component={LoginPage}></Route>
         <Route path='register' component={RegistrationPage}></Route>
-        <Route path='dashboard' component={UserDashboard} onEnter={isAuth}></Route>
+        <Route path='dashboard' component={UserDashboard} onEnter={requireAuth}></Route>
         </Route>
       </Router>
     </Provider>,
