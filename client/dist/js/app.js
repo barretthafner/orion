@@ -29980,9 +29980,9 @@
 	  render: function render() {
 	    var user = this.props.state.app.user;
 	
-	    var friendsList = void 0;
-	    if (user.friends) {
-	      friendsList = user.friends.map(function (item, index) {
+	    var friendshipsList = void 0;
+	    if (user.friendships) {
+	      friendshipsList = user.friendships.map(function (item, index) {
 	        _react2.default.createElement(
 	          'li',
 	          { className: 'list-group-item' },
@@ -30061,7 +30061,7 @@
 	          _react2.default.createElement(
 	            'p',
 	            { className: 'lead' },
-	            'Friends'
+	            'Friendships'
 	          ),
 	          _react2.default.createElement(
 	            'a',
@@ -30071,7 +30071,28 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'list-group' },
-	            friendsList
+	            friendshipsList
+	          )
+	        )
+	      ),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-12' },
+	          _react2.default.createElement(
+	            'form',
+	            { className: 'make-inline', onSubmit: this.props.deleteUser },
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'btn btn-danger' },
+	              'Delete Account'
+	            )
 	          )
 	        )
 	      )

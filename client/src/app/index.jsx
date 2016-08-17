@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
     <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App}>
-        <IndexRoute component={LandingPage} />
-        <Route path='login' component={LoginPage}></Route>
-        <Route path='register' component={RegistrationPage}></Route>
-        <Route path='logout' onEnter={handleOnLogout}></Route>
-        <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
-        <Route path='state' component={AppState}></Route>
+          <IndexRoute component={LandingPage} />
+          <Route path='login' component={LoginPage}></Route>
+          <Route path='register' component={RegistrationPage}></Route>
+          <Route path='logout' onEnter={handleOnLogout}></Route>
+          <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
+          <Route path='state' component={AppState}></Route>
         </Route>
       </Router>
     </Provider>,

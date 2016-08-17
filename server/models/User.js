@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var friends = require("mongoose-friends");
 var passportLocalMongoose = require("passport-local-mongoose");
 
 var UserSchema = new mongoose.Schema({
@@ -11,5 +12,6 @@ var UserSchema = new mongoose.Schema({
     }],
 });
 
+UserSchema.plugin(friends({pathName: "orionFriends"}));
 UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User", UserSchema);

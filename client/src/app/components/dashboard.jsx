@@ -6,9 +6,9 @@ const Dashboard = React.createClass({
   render() {
     const user = this.props.state.app.user;
 
-    let friendsList;
-    if (user.friends) {
-      friendsList = user.friends.map((item, index) => {
+    let friendshipsList;
+    if (user.friendships) {
+      friendshipsList = user.friendships.map((item, index) => {
         <li className="list-group-item">
           <p>{item.username}</p>
           <p>Status: {item.status}</p>
@@ -37,11 +37,22 @@ const Dashboard = React.createClass({
         </div>
         <div className="row">
           <div className="col-md-12">
-            <p className="lead">Friends</p>
+            <p className="lead">Friendships</p>
             <a className="btn btn-primary" href="/user/">Find More Friends</a>
             <div className="list-group">
-              {friendsList}
+              {friendshipsList}
             </div>
+          </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className="row">
+          <div className="col-md-12">
+            <form className="make-inline" onSubmit={this.props.deleteUser}>
+              <button className="btn btn-danger">Delete Account</button>
+            </form>
           </div>
         </div>
       </div>
