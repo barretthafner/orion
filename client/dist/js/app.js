@@ -28657,7 +28657,25 @@
 	
 	var initialState = {
 	  app: {
-	    user: null
+	    "user": {
+	      "username": "testy",
+	      "id": "57b3ad512b30860c4f7946ac",
+	      "email": "testy@orionapp.com",
+	      "starScore": 6,
+	      "list": [{
+	        "title": "test orion",
+	        "starValue": 1,
+	        "_id": "57b3ad522b30860c4f7946b5"
+	      }, {
+	        "title": "make a friend",
+	        "starValue": 2,
+	        "_id": "57b3ad522b30860c4f7946b4"
+	      }, {
+	        "title": "find love",
+	        "starValue": 3,
+	        "_id": "57b3ad522b30860c4f7946b3"
+	      }]
+	    }
 	  }
 	};
 	
@@ -30165,6 +30183,15 @@
 	          null,
 	          _react2.default.createElement(
 	            _reactRouter.Link,
+	            { to: '/state' },
+	            'State'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/login' },
 	            'Login'
 	          )
@@ -30183,6 +30210,15 @@
 	      navContent = _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/state' },
+	            'State'
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'li',
 	          null,
