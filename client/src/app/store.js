@@ -16,5 +16,5 @@ const initialState = {
   }
 };
 
-export const store = createStore(rootReducer, initialState, applyMiddleware(ReduxThunk));
+export const store = createStore(rootReducer, initialState, applyMiddleware(ReduxThunk, routerMiddleware(browserHistory)));
 export const history = syncHistoryWithStore(browserHistory, store);

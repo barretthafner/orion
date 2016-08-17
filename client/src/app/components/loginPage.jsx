@@ -4,6 +4,13 @@ import { push } from 'react-router-redux';
 import * as actions from '../actions';
 
 const LoginPage = React.createClass({
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.state.app.user) {
+         this.props.changeLocation('/dashboard');
+    }
+  },
+
   render() {
     const props = this.props;
     return (
@@ -39,7 +46,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.login(credentials));
     },
     changeLocation: (nextPathname) => {
-      console.log(nextPathname);
       dispatch(push(nextPathname));
     },
   };

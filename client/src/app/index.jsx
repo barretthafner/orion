@@ -6,6 +6,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 //  -------------------------------------------------------------------
 
 import { store, history } from './store';
+import * as actions from './actions';
 
 //  -------------------------------------------------------------------
 
@@ -34,11 +35,15 @@ function requireAuth(nextState, replace) {
   const state = store.getState();
   console.log(state);
   if (!state.app.user) {
-    replace({
-      pathname: '/login'
-    })
+    replace('/login');
   }
 };
+
+function handleOnLogout(nextState, replace) {
+  console.log(actions);
+  store.dispatch(actions.logout());
+  replace('/');
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   ReactDOM.render(
@@ -48,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <IndexRoute component={LandingPage} />
         <Route path='login' component={LoginPage}></Route>
         <Route path='register' component={RegistrationPage}></Route>
+        <Route path='logout' onEnter={handleOnLogout}></Route>
         <Route path='dashboard' component={UserDashboard} onEnter={requireAuth}></Route>
         </Route>
       </Router>

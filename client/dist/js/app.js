@@ -67,6 +67,10 @@
 	
 	var _store = __webpack_require__(260);
 	
+	var _actions = __webpack_require__(268);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
 	var _landingPage = __webpack_require__(271);
 	
 	var _loginPage = __webpack_require__(273);
@@ -85,9 +89,9 @@
 	
 	var _nav2 = _interopRequireDefault(_nav);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
-	//  -------------------------------------------------------------------
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var App = _react2.default.createClass({
 	  displayName: 'App',
@@ -105,15 +109,21 @@
 	
 	//  -------------------------------------------------------------------
 	
+	//  -------------------------------------------------------------------
+	
 	function requireAuth(nextState, replace) {
 	  var state = _store.store.getState();
 	  console.log(state);
 	  if (!state.app.user) {
-	    replace({
-	      pathname: '/login'
-	    });
+	    replace('/login');
 	  }
 	};
+	
+	function handleOnLogout(nextState, replace) {
+	  console.log(actions);
+	  _store.store.dispatch(actions.logout());
+	  replace('/');
+	}
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  _reactDom2.default.render(_react2.default.createElement(
@@ -128,6 +138,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage.LandingPage }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'logout', onEnter: handleOnLogout }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _user2.default, onEnter: requireAuth })
 	      )
 	    )
@@ -28645,7 +28656,7 @@
 	  }
 	};
 	
-	var store = exports.store = (0, _redux.createStore)(rootReducer, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
+	var store = exports.store = (0, _redux.createStore)(rootReducer, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory)));
 	var history = exports.history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, store);
 
 /***/ },
@@ -29066,14 +29077,27 @@
 	  var action = arguments[1];
 	
 	
-	  console.log('reducer called! \naction:', action.type, '\nstate:', state);
+	  //  console.log('reducer called! \naction:', action.type, '\nstate:', state);
 	  switch (action.type) {
 	
 	    case actions.REGISTER_SUCCESS:
-	
 	      return Object.assign({}, state, { user: action.user });
 	
 	    case actions.REGISTER_ERROR:
+	      console.log('register error: ', action.error);
+	      return state;
+	
+	    case actions.LOGIN_SUCCESS:
+	      return Object.assign({}, state, { user: action.user });
+	
+	    case actions.LOGIN_ERROR:
+	      console.log('register error: ', action.error);
+	      return state;
+	
+	    case actions.LOGOUT_SUCCESS:
+	      return Object.assign({}, state, { user: null });
+	
+	    case actions.LOGOUT_ERROR:
 	      console.log('register error: ', action.error);
 	      return state;
 	
@@ -29091,7 +29115,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29148,7 +29172,8 @@
 	        'Content-Type': 'application/json'
 	      },
 	      body: JSON.stringify({
-	        credentials: credentials
+	        username: credentials.username,
+	        password: credentials.password
 	      })
 	    }).then(function (res) {
 	      if (res.state < 200 || res.status >= 300) {
@@ -29178,6 +29203,37 @@
 	var loginError = exports.loginError = function loginError(error) {
 	  return {
 	    type: LOGIN_ERROR,
+	    error: error
+	  };
+	};
+	
+	var logout = exports.logout = function logout() {
+	  return function (dispatch) {
+	    var url = '/api/logout';
+	    return fetch(url).then(function (res) {
+	      if (res.state < 200 || res.status >= 300) {
+	        var error = new Error(res.statusText);
+	        error.res = res;
+	        throw error;
+	      }
+	    }).then(function () {
+	      return dispatch(logoutSuccess());
+	    }).catch(function (error) {
+	      return dispatch(logoutError(error));
+	    });
+	  };
+	};
+	
+	var LOGOUT_SUCCESS = exports.LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+	var logoutSuccess = exports.logoutSuccess = function logoutSuccess() {
+	  return {
+	    type: LOGOUT_SUCCESS
+	  };
+	};
+	var LOGOUT_ERROR = exports.LOGOUT_ERROR = 'LOGOUT_ERROR';
+	var logoutError = exports.logoutError = function logoutError(error) {
+	  return {
+	    type: LOGOUT_ERROR,
 	    error: error
 	  };
 	};
@@ -29789,14 +29845,6 @@
 	  };
 	};
 	
-	//const mapDispatchToProps = (dispatch) => {
-	//  return {
-	//    register: (credentials) => {
-	//      dispatch(actions.register(credentials));
-	//    }
-	//  };
-	//};
-	
 	var Container = (0, _reactRedux.connect)(mapStateToProps)(NavBar);
 	exports.default = Container;
 
@@ -29828,6 +29876,11 @@
 	
 	var LoginPage = _react2.default.createClass({
 	  displayName: 'LoginPage',
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.state.app.user) {
+	      this.props.changeLocation('/dashboard');
+	    }
+	  },
 	  render: function render() {
 	    var _this = this;
 	
@@ -29881,7 +29934,6 @@
 	      dispatch(actions.login(credentials));
 	    },
 	    changeLocation: function changeLocation(nextPathname) {
-	      console.log(nextPathname);
 	      dispatch((0, _reactRouterRedux.push)(nextPathname));
 	    }
 	  };
@@ -29919,7 +29971,6 @@
 	var RegistrationPage = _react2.default.createClass({
 	  displayName: 'RegistrationPage',
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    // user signed in or signed up, assuming redux. you may use this elsewhere.
 	    console.log(nextProps);
 	    if (nextProps.state.app.user) {
 	      this.props.changeLocation('/dashboard');

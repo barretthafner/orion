@@ -20,7 +20,7 @@ router.post("/api/register", jsonParser, function(req, res) {
         user.save();
         user.authenticate(credentials.password, function(){
           console.log("Added User: " + user.username);
-          res.status(200).json(user);
+          res.status(201).json(user);
         });
       }
     });
@@ -30,33 +30,28 @@ router.post("/api/register", jsonParser, function(req, res) {
 
 // login route
 router.post('/api/login', jsonParser, function(req, res, next) {
-  console.log(req.body);
-//  passport.authenticate('local', function(err, user, info) {
-//    console.log(user);
-//    if (err) {
-//        return next(err);
-//    }
-//    if (!user) {
-//        return res.redirect('/login');
-//    } else {
-//        req.logIn(user, function(err) {
-//            if (err) {
-//                req.flash("error", info.message);
-//                return next(err);
-//            } else {
-//                req.flash("success", "Welcome back " + user.username + "! Let's get get something done!");
-//                return res.redirect('/user/' + user._id);
-//            }
-//        });
-//    }
-//  })(req, res, next);
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+        return next(err);
+    }
+    if (!user) {
+        return res.status(500);
+    } else {
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            } else {
+                return res.status(200).json(user);
+            }
+        });
+    }
+  })(req, res, next);
 });
 
 // logout route
-//router.get("/logout", function(req, res) {
-//    req.logout();
-//    req.flash("success", "You are logged out!");
-//    res.redirect("/");
-//});
+router.get("/api/logout", function(req, res) {
+    req.logout();
+    res.sendStatus(200);
+});
 
 module.exports = router;

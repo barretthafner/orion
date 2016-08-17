@@ -43,14 +43,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-//const mapDispatchToProps = (dispatch) => {
-//  return {
-//    register: (credentials) => {
-//      dispatch(actions.register(credentials));
-//    }
-//  };
-//};
-
 const Container = connect(mapStateToProps)(NavBar);
 export default Container
 

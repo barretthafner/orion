@@ -6,7 +6,6 @@ import * as actions from '../actions';
 const RegistrationPage = React.createClass({
 
   componentWillReceiveProps(nextProps) {
-    // user signed in or signed up, assuming redux. you may use this elsewhere.
     console.log(nextProps);
     if (nextProps.state.app.user) {
          this.props.changeLocation('/dashboard');
