@@ -113,14 +113,12 @@
 	
 	function requireAuth(nextState, replace) {
 	  var state = _store.store.getState();
-	  console.log(state);
 	  if (!state.app.user) {
 	    replace('/login');
 	  }
 	};
 	
 	function handleOnLogout(nextState, replace) {
-	  console.log(actions);
 	  _store.store.dispatch(actions.logout());
 	  replace('/');
 	}
@@ -29790,15 +29788,6 @@
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/dashboard' },
-	            'Dashboard'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: '/user/currentUser._id' },
 	            'Signed in as: ',
 	            state.user.username
 	          )
@@ -29971,7 +29960,6 @@
 	var RegistrationPage = _react2.default.createClass({
 	  displayName: 'RegistrationPage',
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    console.log(nextProps);
 	    if (nextProps.state.app.user) {
 	      this.props.changeLocation('/dashboard');
 	    }
@@ -30033,7 +30021,6 @@
 	      dispatch(actions.register(credentials));
 	    },
 	    changeLocation: function changeLocation(nextPathname) {
-	      console.log(nextPathname);
 	      dispatch((0, _reactRouterRedux.push)(nextPathname));
 	    }
 	  };

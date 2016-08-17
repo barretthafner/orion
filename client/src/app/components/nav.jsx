@@ -16,8 +16,7 @@ const NavBar = React.createClass({
     } else {
       navContent = (
         <ul className="nav navbar-nav navbar-right">
-          <li><Link to={'/dashboard'}>Dashboard</Link></li>
-          <li><Link to={'/user/currentUser._id'}>Signed in as: { state.user.username }</Link></li>
+          <li><Link to={'/dashboard'}>Signed in as: { state.user.username }</Link></li>
           <li><Link to={'/logout'}>Logout</Link></li>
         </ul>
       );

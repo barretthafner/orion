@@ -7,7 +7,7 @@ const LoginPage = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.state.app.user) {
-         this.props.changeLocation('/dashboard');
+      this.props.changeLocation('/dashboard');
     }
   },
 

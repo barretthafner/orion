@@ -6,9 +6,8 @@ import * as actions from '../actions';
 const RegistrationPage = React.createClass({
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.state.app.user) {
-         this.props.changeLocation('/dashboard');
+      this.props.changeLocation('/dashboard');
     }
   },
 
@@ -49,7 +48,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.register(credentials));
     },
     changeLocation: (nextPathname) => {
-      console.log(nextPathname);
       dispatch(push(nextPathname));
     },
   };

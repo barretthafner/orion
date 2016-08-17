@@ -33,14 +33,12 @@ const App = React.createClass({
 
 function requireAuth(nextState, replace) {
   const state = store.getState();
-  console.log(state);
   if (!state.app.user) {
     replace('/login');
   }
 };
 
 function handleOnLogout(nextState, replace) {
-  console.log(actions);
   store.dispatch(actions.logout());
   replace('/');
 }

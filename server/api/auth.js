@@ -4,6 +4,15 @@ var express     = require("express"),
     passport    = require("passport"),
     User        = require("../models/User");
 
+function composeUserData(user) {
+  return {
+    username: user.username,
+    id: user._id,
+    email: user.email || null,
+    starScore: user.starScore,
+    list: user.list
+  }
+}
 
 
 router.post("/api/register", jsonParser, function(req, res) {
@@ -20,7 +29,7 @@ router.post("/api/register", jsonParser, function(req, res) {
         user.save();
         user.authenticate(credentials.password, function(){
           console.log("Added User: " + user.username);
-          res.status(201).json(user);
+          res.status(201).json(composeUserData(user));
         });
       }
     });
@@ -41,7 +50,7 @@ router.post('/api/login', jsonParser, function(req, res, next) {
             if (err) {
                 return next(err);
             } else {
-                return res.status(200).json(user);
+                return res.status(200).json(composeUserData(user));
             }
         });
     }
