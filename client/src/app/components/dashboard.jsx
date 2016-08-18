@@ -50,10 +50,8 @@ const Dashboard = React.createClass({
         <br />
         <br />
         <div className="row">
-          <div className="col-md-12">
-            <form className="make-inline" onSubmit={this.props.deleteUser}>
-              <button className="btn btn-danger">Delete Account</button>
-            </form>
+          <div className="col-md-12 text-center">
+            <Link className="btn btn-danger" to={'delete'}>Delete Account</Link>
           </div>
         </div>
       </div>
@@ -71,7 +69,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
+    deleteCurrentUser: (user) => {
+      dispatch(actions.deleteCurrentUser(user));
+    }
   };
 };
 

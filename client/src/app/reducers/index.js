@@ -34,6 +34,13 @@ export default function appReducer(state = {}, action) {
       console.log('getUsersList error: ', action.error);
       return state;
 
+    case actions.DELETE_CURRENT_USER_SUCCESS:
+      return Object.assign({}, state, {user: null, usersList: null});
+
+    case actions.DELETE_CURRENT_USER_ERROR:
+      console.log('getUsersList error: ', action.error);
+      return state;
+
     default:
       return state;
   }

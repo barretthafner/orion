@@ -46,8 +46,13 @@ function handleOnLogout(nextState, replace) {
 }
 
 function handleUserDelete(nextState, replace) {
-  store.dispatch(actions.deleteCurrentUser());
-  replace('/');
+  const state = store.getState();
+  if (!state.app.user) {
+    replace('/login');
+  } else {
+    store.dispatch(actions.deleteCurrentUser(state.app.user));
+    replace('/');
+  }
 }
 
 
@@ -62,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <Route path='logout' onEnter={handleOnLogout} onEnter={requireAuth}></Route>
           <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
           <Route path='users' component={UsersIndex}  onEnter={requireAuth}></Route>
-          <Route path='delete' onEnter={handleUserDelete} onEnter={requireAuth}></Route>
+          <Route path='delete' onEnter={handleUserDelete}></Route>
           <Route path='state' component={AppState}></Route>
         </Route>
       </Router>

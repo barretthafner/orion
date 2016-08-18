@@ -188,10 +188,9 @@ export const getUsersListError = (error) => {
 
 export const deleteCurrentUser = (user) => {
   return (dispatch) => {
+    console.log(user);
     const url = '/api/user/' + user.id;
-    return fetch(url, {
-        method: 'delete'
-    })
+    return fetch(url,  { method: 'delete' })
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -212,17 +211,16 @@ export const deleteCurrentUser = (user) => {
   }
 }
 
-export const _SUCCESS = '_SUCCESS';
+export const DELETE_CURRENT_USER_SUCCESS = 'DELETE_CURRENT_USER_SUCCESS';
 export const deleteCurrentUserSuccess = () => {
   return {
-    type: _SUCCESS,
-
+    type: DELETE_CURRENT_USER_SUCCESS,
   }
 }
-export const _ERROR = '_ERROR';
+export const DELETE_CURRENT_USER_ERROR = 'DELETE_CURRENT_USER_ERROR';
 export const deleteCurrentUserError = (error) => {
   return {
-    type: _ERROR,
+    type: DELETE_CURRENT_USER_ERROR,
     error
   }
 }

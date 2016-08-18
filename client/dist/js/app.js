@@ -136,8 +136,13 @@
 	}
 	
 	function handleUserDelete(nextState, replace) {
-	  _store.store.dispatch(actions.deleteCurrentUser());
-	  replace('/');
+	  var state = _store.store.getState();
+	  if (!state.app.user) {
+	    replace('/login');
+	  } else {
+	    _store.store.dispatch(actions.deleteCurrentUser(state.app.user));
+	    replace('/');
+	  }
 	}
 	
 	document.addEventListener('DOMContentLoaded', function () {
@@ -156,7 +161,7 @@
 	        _react2.default.createElement(_reactRouter.Route, _defineProperty({ path: 'logout', onEnter: handleOnLogout }, 'onEnter', requireAuth)),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _dashboard2.default, onEnter: requireAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'users', component: _usersList2.default, onEnter: requireAuth }),
-	        _react2.default.createElement(_reactRouter.Route, _defineProperty({ path: 'delete', onEnter: handleUserDelete }, 'onEnter', requireAuth)),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'delete', onEnter: handleUserDelete }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'state', component: _state2.default })
 	      )
 	    )
@@ -29150,6 +29155,13 @@
 	      console.log('getUsersList error: ', action.error);
 	      return state;
 	
+	    case actions.DELETE_CURRENT_USER_SUCCESS:
+	      return Object.assign({}, state, { user: null, usersList: null });
+	
+	    case actions.DELETE_CURRENT_USER_ERROR:
+	      console.log('getUsersList error: ', action.error);
+	      return state;
+	
 	    default:
 	      return state;
 	  }
@@ -29164,7 +29176,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.deleteCurrentUserError = exports._ERROR = exports.deleteCurrentUserSuccess = exports._SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29324,10 +29336,9 @@
 	
 	var deleteCurrentUser = exports.deleteCurrentUser = function deleteCurrentUser(user) {
 	  return function (dispatch) {
+	    console.log(user);
 	    var url = '/api/user/' + user.id;
-	    return fetch(url, {
-	      method: 'delete'
-	    }).then(function (res) {
+	    return fetch(url, { method: 'delete' }).then(function (res) {
 	      if (res.state < 200 || res.status >= 300) {
 	        var error = new Error(res.statusText);
 	        error.res = res;
@@ -29341,17 +29352,16 @@
 	  };
 	};
 	
-	var _SUCCESS = exports._SUCCESS = '_SUCCESS';
+	var DELETE_CURRENT_USER_SUCCESS = exports.DELETE_CURRENT_USER_SUCCESS = 'DELETE_CURRENT_USER_SUCCESS';
 	var deleteCurrentUserSuccess = exports.deleteCurrentUserSuccess = function deleteCurrentUserSuccess() {
 	  return {
-	    type: _SUCCESS
-	
+	    type: DELETE_CURRENT_USER_SUCCESS
 	  };
 	};
-	var _ERROR = exports._ERROR = '_ERROR';
+	var DELETE_CURRENT_USER_ERROR = exports.DELETE_CURRENT_USER_ERROR = 'DELETE_CURRENT_USER_ERROR';
 	var deleteCurrentUserError = exports.deleteCurrentUserError = function deleteCurrentUserError(error) {
 	  return {
-	    type: _ERROR,
+	    type: DELETE_CURRENT_USER_ERROR,
 	    error: error
 	  };
 	};
@@ -30181,15 +30191,11 @@
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-12' },
+	          { className: 'col-md-12 text-center' },
 	          _react2.default.createElement(
-	            'form',
-	            { className: 'make-inline', onSubmit: this.props.deleteUser },
-	            _react2.default.createElement(
-	              'button',
-	              { className: 'btn btn-danger' },
-	              'Delete Account'
-	            )
+	            _reactRouter.Link,
+	            { className: 'btn btn-danger', to: 'delete' },
+	            'Delete Account'
 	          )
 	        )
 	      )
@@ -30204,7 +30210,11 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
+	  return {
+	    deleteCurrentUser: function deleteCurrentUser(user) {
+	      dispatch(actions.deleteCurrentUser(user));
+	    }
+	  };
 	};
 	
 	var Container = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Dashboard);
