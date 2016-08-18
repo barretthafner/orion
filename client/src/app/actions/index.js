@@ -188,7 +188,6 @@ export const getUsersListError = (error) => {
 
 export const deleteCurrentUser = (user) => {
   return (dispatch) => {
-    console.log(user);
     const url = '/api/user/' + user.id;
     return fetch(url,  { method: 'delete' })
       .then((res) => {
@@ -224,4 +223,3 @@ export const deleteCurrentUserError = (error) => {
     error
   }
 }
-

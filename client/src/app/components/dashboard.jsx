@@ -25,7 +25,11 @@ const Dashboard = React.createClass({
             <p className="lead">{user.username}'s List</p>
             <div className="list-group">
               {user.list.map((item, index) => {
-                return ( <li className="list-group-item" key={index}>{item.title}</li> );
+                return (
+                  <li className="list-group-item" key={index} data-value={item.starValue}>
+                    {item.title} - StarValue: {item.starValue} <button className="btn btn-success btn-sm">Complete</button>
+                  </li>
+                );
               })}
             </div>
           </div>

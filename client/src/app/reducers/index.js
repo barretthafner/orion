@@ -21,7 +21,7 @@ export default function appReducer(state = {}, action) {
       return state;
 
     case actions.LOGOUT_SUCCESS:
-      return Object.assign({}, state, {user: null, usersList: null});
+      return Object.assign({}, state, {user: null, usersList: []});
 
     case actions.LOGOUT_ERROR:
       console.log('logout error: ', action.error);
@@ -35,7 +35,7 @@ export default function appReducer(state = {}, action) {
       return state;
 
     case actions.DELETE_CURRENT_USER_SUCCESS:
-      return Object.assign({}, state, {user: null, usersList: null});
+      return Object.assign({}, state, {user: null, usersList: []});
 
     case actions.DELETE_CURRENT_USER_ERROR:
       console.log('getUsersList error: ', action.error);

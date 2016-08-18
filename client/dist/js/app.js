@@ -103,14 +103,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	//  -------------------------------------------------------------------
-	
-	//  -------------------------------------------------------------------
-	
-	//  -------------------------------------------------------------------
-	
 	var App = _react2.default.createClass({
 	  displayName: 'App',
 	  render: function render() {
@@ -123,6 +115,12 @@
 	  }
 	});
 	
+	//  -------------------------------------------------------------------
+	
+	//  -------------------------------------------------------------------
+	
+	//  -------------------------------------------------------------------
+	
 	function requireAuth(nextState, replace) {
 	  var state = _store.store.getState();
 	  if (!state.app.user) {
@@ -131,8 +129,13 @@
 	};
 	
 	function handleOnLogout(nextState, replace) {
-	  _store.store.dispatch(actions.logout());
-	  replace('/');
+	  var state = _store.store.getState();
+	  if (!state.app.user) {
+	    replace('/login');
+	  } else {
+	    _store.store.dispatch(actions.logout());
+	    replace('/');
+	  }
 	}
 	
 	function handleUserDelete(nextState, replace) {
@@ -158,7 +161,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _loginPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registrationPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, _defineProperty({ path: 'logout', onEnter: handleOnLogout }, 'onEnter', requireAuth)),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'logout', onEnter: handleOnLogout }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'dashboard', component: _dashboard2.default, onEnter: requireAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'users', component: _usersList2.default, onEnter: requireAuth }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'delete', onEnter: handleUserDelete }),
@@ -29142,7 +29145,7 @@
 	      return state;
 	
 	    case actions.LOGOUT_SUCCESS:
-	      return Object.assign({}, state, { user: null, usersList: null });
+	      return Object.assign({}, state, { user: null, usersList: [] });
 	
 	    case actions.LOGOUT_ERROR:
 	      console.log('logout error: ', action.error);
@@ -29156,7 +29159,7 @@
 	      return state;
 	
 	    case actions.DELETE_CURRENT_USER_SUCCESS:
-	      return Object.assign({}, state, { user: null, usersList: null });
+	      return Object.assign({}, state, { user: null, usersList: [] });
 	
 	    case actions.DELETE_CURRENT_USER_ERROR:
 	      console.log('getUsersList error: ', action.error);
@@ -29336,7 +29339,6 @@
 	
 	var deleteCurrentUser = exports.deleteCurrentUser = function deleteCurrentUser(user) {
 	  return function (dispatch) {
-	    console.log(user);
 	    var url = '/api/user/' + user.id;
 	    return fetch(url, { method: 'delete' }).then(function (res) {
 	      if (res.state < 200 || res.status >= 300) {
@@ -29921,12 +29923,12 @@
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
+	          _react2.default.createElement('input', { type: 'text', ref: 'username', placeholder: 'username' })
 	        ),
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
+	          _react2.default.createElement('input', { type: 'password', ref: 'password', placeholder: 'password' })
 	        ),
 	        _react2.default.createElement(
 	          'button',
@@ -30017,12 +30019,12 @@
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'username', placeholder: 'username' })
+	          _react2.default.createElement('input', { type: 'text', ref: 'username', placeholder: 'username' })
 	        ),
 	        _react2.default.createElement(
 	          'label',
 	          null,
-	          _react2.default.createElement('input', { ref: 'password', placeholder: 'password' })
+	          _react2.default.createElement('input', { type: 'password', ref: 'password', placeholder: 'password' })
 	        ),
 	        ' (hint: password1)',
 	        _react2.default.createElement('br', null),
@@ -30134,8 +30136,16 @@
 	            user.list.map(function (item, index) {
 	              return _react2.default.createElement(
 	                'li',
-	                { className: 'list-group-item', key: index },
-	                item.title
+	                { className: 'list-group-item', key: index, 'data-value': item.starValue },
+	                item.title,
+	                ' - StarValue: ',
+	                item.starValue,
+	                ' ',
+	                _react2.default.createElement(
+	                  'button',
+	                  { className: 'btn btn-success btn-sm' },
+	                  'Complete'
+	                )
 	              );
 	            })
 	          )
@@ -30338,7 +30348,7 @@
 	            _react2.default.createElement(
 	              'form',
 	              { onSubmit: function onSubmit() {
-	                  return _this.props.sendFriendRequest(user);
+	                  return _this.props.sendFriendRequest(user.id);
 	                } },
 	              _react2.default.createElement(
 	                'button',
@@ -30364,8 +30374,8 @@
 	    getUsersList: function getUsersList() {
 	      dispatch(actions.getUsersList());
 	    },
-	    sendFriendRequest: function sendFriendRequest(user) {
-	      dispatch(actions.sendFriendRequest(user));
+	    sendFriendRequest: function sendFriendRequest(userId) {
+	      dispatch(actions.sendFriendRequest(userId));
 	    }
 	  };
 	};

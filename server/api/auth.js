@@ -28,10 +28,10 @@ function composeUserData(user) {
 
 
 router.post("/api/register", jsonParser, function(req, res) {
-//  res.status(200).json(req.body);
   if (req.body.credentials) {
     const credentials = req.body.credentials;
     const newUser = new User({username: credentials.username});
+    console.log(newUser);
     User.register(newUser, credentials.password, function(err, user){
       if(err){
         res.status(500).json(err);

@@ -10,13 +10,14 @@ function composeUserData(user) {
   return {
     username: user.username,
     id: user._id,
-    email: user.email || null,
-    starScore: user.starScore,
-    list: user.list,
-    friendships: []
+//    email: user.email || null,
+//    starScore: user.starScore,
+//    list: user.list,
+//    friendships: []
   }
 }
 
+// index route
 router.get("/api/user", (req, res) => {
     User.find({}, (err, users) => {
       if(err){
@@ -30,6 +31,10 @@ router.get("/api/user", (req, res) => {
     });
 });
 
+//show
+
+
+// destroy route
 router.delete("/api/user/:id", (req, res) => {
   console.log(req.params);
   User.findById(req.params.id, (err, user) => {

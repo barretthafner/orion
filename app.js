@@ -55,7 +55,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // Add routes -----------------------------------------------------------------
 app.use(require("./server/api/auth"));
-app.use(require("./server/api/userData"));
+app.use(require("./server/api/user"));
 
 // Serve React App -------------------------------------------------------------------
 app.use(express.static(__dirname + "/client/dist"));

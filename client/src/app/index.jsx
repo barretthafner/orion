@@ -41,8 +41,13 @@ function requireAuth(nextState, replace) {
 };
 
 function handleOnLogout(nextState, replace) {
-  store.dispatch(actions.logout());
-  replace('/');
+  const state = store.getState();
+  if (!state.app.user) {
+    replace('/login');
+  } else {
+    store.dispatch(actions.logout());
+    replace('/');
+  }
 }
 
 function handleUserDelete(nextState, replace) {
@@ -64,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <IndexRoute component={LandingPage} />
           <Route path='login' component={LoginPage}></Route>
           <Route path='register' component={RegistrationPage}></Route>
-          <Route path='logout' onEnter={handleOnLogout} onEnter={requireAuth}></Route>
+          <Route path='logout' onEnter={handleOnLogout}></Route>
           <Route path='dashboard' component={Dashboard} onEnter={requireAuth}></Route>
           <Route path='users' component={UsersIndex}  onEnter={requireAuth}></Route>
           <Route path='delete' onEnter={handleUserDelete}></Route>

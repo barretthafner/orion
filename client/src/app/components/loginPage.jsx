@@ -25,8 +25,8 @@ const LoginPage = React.createClass({
             })
           }
         }>
-          <label><input ref="username" placeholder="username" /></label>
-          <label><input ref="password" placeholder="password" /></label>
+          <label><input type="text" ref="username" placeholder="username" /></label>
+          <label><input type="password" ref="password" placeholder="password" /></label>
           <button type="submit">Login</button>
         </form>
       </div>

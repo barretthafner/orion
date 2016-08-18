@@ -24,7 +24,7 @@ const UsersIndex = React.createClass({
                 (user.id === currentUserId) ? null :
                   <div className="col-md-4" key={index}>
                     <h2>{user.username}</h2>
-                    <form onSubmit={() => this.props.sendFriendRequest(user)}>
+                    <form onSubmit={() => this.props.sendFriendRequest(user.id)}>
                       <button className="btn btn-primary">Request Friendship</button>
                     </form>
                   </div>
@@ -48,8 +48,8 @@ const mapDispatchToProps = (dispatch) => {
     getUsersList: () => {
       dispatch(actions.getUsersList());
     },
-    sendFriendRequest: (user) => {
-      dispatch(actions.sendFriendRequest(user));
+    sendFriendRequest: (userId) => {
+      dispatch(actions.sendFriendRequest(userId));
     }
   };
 };
