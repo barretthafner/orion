@@ -1,3 +1,8 @@
-@import 'reset';
+body, html {
+  font-size: 100%;
+  padding: 0; margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
 @import 'nav';
 @import 'root';
