@@ -29162,7 +29162,7 @@
 	      return Object.assign({}, state, { user: null, usersList: [] });
 	
 	    case actions.DELETE_CURRENT_USER_ERROR:
-	      console.log('getUsersList error: ', action.error);
+	      console.log('deleteCurrentUser error: ', action.error);
 	      return state;
 	
 	    case actions.SEND_FRIEND_REQUEST_SUCCESS:
@@ -29171,7 +29171,7 @@
 	      return friendRequestOutput;
 	
 	    case actions.SEND_FRIEND_REQUEST_ERROR:
-	      console.log('getUsersList error: ', action.error);
+	      console.log('sendFriendRequest error: ', action.error);
 	      return state;
 	
 	    case actions.UNFRIEND_SUCCESS:
@@ -29180,7 +29180,16 @@
 	      return unFriendOutput;
 	
 	    case actions.UNFRIEND_ERROR:
-	      console.log('getUsersList error: ', action.error);
+	      console.log('unFriend error: ', action.error);
+	      return state;
+	
+	    case actions.ADD_LIST_ITEM_SUCCESS:
+	      var addListItemOutput = Object.assign({}, state);
+	      addListItemOutput.user.list = action.list;
+	      return addListItemOutput;
+	
+	    case actions.ADD_LIST_ITEM_ERROR:
+	      console.log('addListItem error: ', action.error);
 	      return state;
 	
 	    default:
@@ -29197,7 +29206,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.addListItemError = exports.ADD_LIST_ITEM_ERROR = exports.addListItemSuccess = exports.ADD_LIST_ITEM_SUCCESS = exports.addListItem = exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29454,6 +29463,50 @@
 	var unFriendError = exports.unFriendError = function unFriendError(error) {
 	  return {
 	    type: UNFRIEND_ERROR,
+	    error: error
+	  };
+	};
+	
+	var addListItem = exports.addListItem = function addListItem(item) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var url = '/api/user/' + state.app.user.id + '/list';
+	    return fetch(url, {
+	      method: 'put',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify({
+	        item: item
+	      })
+	    }).then(function (res) {
+	      if (res.state < 200 || res.status >= 300) {
+	        var error = new Error(res.statusText);
+	        error.res = res;
+	        throw error;
+	      }
+	      return res;
+	    }).then(function (res) {
+	      return res.json();
+	    }).then(function (data) {
+	      return dispatch(addListItemSuccess(data));
+	    }).catch(function (error) {
+	      return dispatch(addListItemError(error));
+	    });
+	  };
+	};
+	
+	var ADD_LIST_ITEM_SUCCESS = exports.ADD_LIST_ITEM_SUCCESS = 'ADD_LIST_ITEM_SUCCESS';
+	var addListItemSuccess = exports.addListItemSuccess = function addListItemSuccess(list) {
+	  return {
+	    type: ADD_LIST_ITEM_SUCCESS,
+	    list: list
+	  };
+	};
+	var ADD_LIST_ITEM_ERROR = exports.ADD_LIST_ITEM_ERROR = 'ADD_LIST_ITEM_ERROR';
+	var addListItemError = exports.addListItemError = function addListItemError(error) {
+	  return {
+	    type: ADD_LIST_ITEM_ERROR,
 	    error: error
 	  };
 	};
@@ -30241,7 +30294,41 @@
 	                  'Complete'
 	                )
 	              );
-	            })
+	            }),
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'list-group-item' },
+	              _react2.default.createElement(
+	                'form',
+	                { className: 'form-inline' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    { htmlFor: 'title' },
+	                    'Item'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', id: 'title', className: 'form-control', ref: 'title' }),
+	                  _react2.default.createElement(
+	                    'label',
+	                    { htmlFor: 'starValue' },
+	                    'Star Value'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'number', id: 'starValue', className: 'form-control', ref: 'starValue' }),
+	                  _react2.default.createElement(
+	                    'button',
+	                    { className: 'btn btn-primary', onClick: function onClick(event) {
+	                        event.preventDefault();
+	                        _this.props.addListItem({ title: _this.refs.title.value, starValue: _this.refs.starValue.value });
+	                        _this.refs.title.value = "";
+	                        _this.refs.title.starValue.value = "";
+	                      } },
+	                    'Add item'
+	                  )
+	                )
+	              )
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -30320,6 +30407,9 @@
 	    },
 	    unFriend: function unFriend(friend) {
 	      dispatch(actions.unFriend(friend));
+	    },
+	    addListItem: function addListItem(itemObj) {
+	      dispatch(actions.addListItem(itemObj));
 	    }
 	  };
 	};

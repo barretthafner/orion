@@ -18,7 +18,7 @@ function composeUserData(user) {
 }
 
 // index route
-router.get("/api/user", [jsonParser, middleware.isLoggedIn], (req, res) => {
+router.get("/api/user", middleware.isLoggedIn, (req, res) => {
     User.find({}, (err, users) => {
       if(err){
         res.status(500).json(err);
@@ -126,8 +126,16 @@ router.delete("/api/user/:id/friend/:friendId", (req, res) => {
 });
 
 //new list item
-router.put("/api/user/:id/list", jsonParser, (req, res) => {
-  User.findById()
+router.put("/api/user/:id/list", (req, res) => {
+  User.findById(req.params.id, (err, user) =>{
+    if (err) {
+      res.status(404).json(err);
+    } else {
+      user.list.push(req.body.item);
+      user.save();
+      res.status(200).json(user.list);
+    }
+  });
 });
 
 

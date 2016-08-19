@@ -38,7 +38,7 @@ export default function appReducer(state = {}, action) {
       return Object.assign({}, state, {user: null, usersList: []});
 
     case actions.DELETE_CURRENT_USER_ERROR:
-      console.log('getUsersList error: ', action.error);
+      console.log('deleteCurrentUser error: ', action.error);
       return state;
 
     case actions.SEND_FRIEND_REQUEST_SUCCESS:
@@ -47,7 +47,7 @@ export default function appReducer(state = {}, action) {
       return friendRequestOutput;
 
     case actions.SEND_FRIEND_REQUEST_ERROR:
-      console.log('getUsersList error: ', action.error);
+      console.log('sendFriendRequest error: ', action.error);
       return state;
 
     case actions.UNFRIEND_SUCCESS:
@@ -56,7 +56,16 @@ export default function appReducer(state = {}, action) {
       return unFriendOutput;
 
     case actions.UNFRIEND_ERROR:
-      console.log('getUsersList error: ', action.error);
+      console.log('unFriend error: ', action.error);
+      return state;
+
+    case actions.ADD_LIST_ITEM_SUCCESS:
+      const addListItemOutput = Object.assign({}, state);
+      addListItemOutput.user.list = action.list;
+      return addListItemOutput;
+
+    case actions.ADD_LIST_ITEM_ERROR:
+      console.log('addListItem error: ', action.error);
       return state;
 
     default:

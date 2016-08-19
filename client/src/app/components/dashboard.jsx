@@ -35,6 +35,25 @@ const Dashboard = React.createClass({
                   </li>
                 );
               })}
+              <li className="list-group-item">
+                <form className="form-inline">
+                  <div className="form-group">
+                    <label htmlFor="title">Item</label>
+                    <input type="text" id="title" className="form-control" ref="title" />
+                    <label htmlFor="starValue">Star Value</label>
+                    <input type="number" id="starValue" className="form-control" ref="starValue"/>
+                    <button className="btn btn-primary" onClick={ (event) =>
+                        {
+                          event.preventDefault();
+                          this.props.addListItem({title: this.refs.title.value, starValue: this.refs.starValue.value})
+                          this.refs.title.value = "";
+                          this.refs.title.starValue.value = "";
+                        }
+                      }>Add item</button>
+                  </div>
+                </form>
+
+              </li>
             </div>
           </div>
           <div className="col-md-4">
@@ -82,6 +101,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     unFriend: (friend) => {
       dispatch(actions.unFriend(friend));
+    },
+    addListItem: (itemObj) => {
+      dispatch(actions.addListItem(itemObj));
     }
   };
 };

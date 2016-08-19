@@ -312,3 +312,55 @@ export const unFriendError = (error) => {
     error
   }
 }
+
+export const addListItem = (item) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const url = '/api/user/' + state.app.user.id + '/list';
+    return fetch(url, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          item: item
+        })
+      })
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+        return res;
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return dispatch(
+          addListItemSuccess(data)
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          addListItemError(error)
+        );
+      });
+  }
+}
+
+export const ADD_LIST_ITEM_SUCCESS = 'ADD_LIST_ITEM_SUCCESS';
+export const addListItemSuccess = (list) => {
+  return {
+    type: ADD_LIST_ITEM_SUCCESS,
+    list
+  }
+}
+export const ADD_LIST_ITEM_ERROR = 'ADD_LIST_ITEM_ERROR';
+export const addListItemError = (error) => {
+  return {
+    type: ADD_LIST_ITEM_ERROR,
+    error
+  }
+}
