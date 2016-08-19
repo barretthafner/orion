@@ -17,7 +17,7 @@ const NavBar = React.createClass({
       navContent = (
         <ul className="nav navbar-nav navbar-right">
           <li>
-            <a id="signed-in-as" disabled={true}>
+            <a className="unselectable" id="signed-in-as" disabled={true}>
               Signed in as: { state.user.username }
             </a>
           </li>

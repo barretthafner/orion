@@ -6,10 +6,10 @@ var express     = require("express"),
     User        = require("../models/User");
 
 function composeUserData(user) {
-
   return {
     username: user.username,
     id: user._id,
+    // only need name and id
 //    email: user.email || null,
 //    starScore: user.starScore,
 //    list: user.list,
@@ -33,7 +33,7 @@ router.get("/api/user", middleware.isLoggedIn, (req, res) => {
 
 
 // destroy route
-router.delete("/api/user/:id", (req, res) => {
+router.delete("/api/user/:id", middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err){
       res.status(404).json(err);
@@ -69,7 +69,7 @@ router.delete("/api/user/:id", (req, res) => {
 });
 
 // sendFriendRequest
-router.put("/api/user/:id/friend/:friendId", (req, res) => {
+router.put("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res) => {
   const user1Id = req.params.id;
   const user2Id = req.params.friendId;
   User.findById(user1Id, (err, user1) => {
@@ -95,7 +95,7 @@ router.put("/api/user/:id/friend/:friendId", (req, res) => {
 });
 
 // unFriend
-router.delete("/api/user/:id/friend/:friendId", (req, res) => {
+router.delete("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res) => {
   const user1Id = req.params.id;
   const user2Id = req.params.friendId;
     User.findById(user1Id, (err, user1) => {
@@ -126,7 +126,7 @@ router.delete("/api/user/:id/friend/:friendId", (req, res) => {
 });
 
 //new list item
-router.put("/api/user/:id/list", (req, res) => {
+router.put("/api/user/:id/list", middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user) =>{
     if (err) {
       res.status(404).json(err);
@@ -139,7 +139,7 @@ router.put("/api/user/:id/list", (req, res) => {
 });
 
 //complete list item
-router.delete("/api/user/:id/list/:itemId", (req, res) => {
+router.delete("/api/user/:id/list/:itemId", middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user1) => {
     if (err) {
       res.status(404).json(err);

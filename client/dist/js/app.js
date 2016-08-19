@@ -30061,7 +30061,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'jumbotron' },
+	      { className: 'jumbotron unselectable' },
 	      _react2.default.createElement(
 	        'h1',
 	        null,
@@ -30326,12 +30326,6 @@
 	            null,
 	            'StarScore: ',
 	            item.friend.starScore
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Status: ',
-	            item.status
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -30673,20 +30667,13 @@
 	        );
 	        friendships.forEach(function (friend) {
 	          if (friend._id === user.id) {
-	            output = _react2.default.createElement(
-	              'div',
-	              { className: 'col-md-4', key: index },
-	              _react2.default.createElement(
-	                'h2',
-	                null,
-	                user.username
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                { className: 'btn', disabled: true },
-	                'Request Sent'
-	              )
-	            );
+	            //            output = (
+	            //              <div className="col-md-4" key={index}>
+	            //                <h2>{user.username}</h2>
+	            //                  <button className="btn" disabled={true}>Friend</button>
+	            //              </div>
+	            //            );
+	            output = null;
 	          }
 	        });
 	        userElements.push(output);
@@ -30800,7 +30787,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'a',
-	            { id: 'signed-in-as', disabled: true },
+	            { className: 'unselectable', id: 'signed-in-as', disabled: true },
 	            'Signed in as: ',
 	            state.user.username
 	          )

@@ -14,7 +14,6 @@ const Dashboard = React.createClass({
           <li className="list-group-item" key={index}>
             <p>{item.friend.username}</p>
             <p>StarScore: {item.friend.starScore}</p>
-            <p>Status: {item.status}</p>
             <div className="btn btn-warning" onClick={
                 () => this.props.unFriend(item.friend)
               }>Remove Friend</div>

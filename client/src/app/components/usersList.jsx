@@ -27,12 +27,13 @@ const UsersIndex = React.createClass({
         );
         friendships.forEach((friend) => {
           if (friend._id === user.id) {
-            output = (
-              <div className="col-md-4" key={index}>
-                <h2>{user.username}</h2>
-                  <button className="btn" disabled={true}>Request Sent</button>
-              </div>
-            );
+//            output = (
+//              <div className="col-md-4" key={index}>
+//                <h2>{user.username}</h2>
+//                  <button className="btn" disabled={true}>Friend</button>
+//              </div>
+//            );
+            output = null;
           }
         });
         userElements.push(output);

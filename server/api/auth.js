@@ -39,7 +39,6 @@ router.post("/api/register", function(req, res) {
 
 // login route
 router.post('/api/login', passport.authenticate('local'), function(req, res) {
-  console.log(req.isAuthenticated());
   User.getFriends(req.user, function(err, friends){
     if (err) {
       return res.status(500);

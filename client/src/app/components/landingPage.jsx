@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 const LandingPage = React.createClass({
   render() {
     return (
-      <div className="jumbotron">
+      <div className="jumbotron unselectable">
         <h1>Welcome to Orion</h1>
         <h3>An app to help you get things done with your friends.</h3>
       </div>

@@ -4,7 +4,7 @@ var User = require("./server/models/User");
 var data = [
     {
         username: "barrett",
-        password: "barrett",
+        password: "likespizza!",
         starScore: 5,
         list: [
             {
@@ -23,7 +23,7 @@ var data = [
     },
     {
         username: "katy",
-        password: "katy",
+        password: "isthecutest!",
         starScore: 5,
         list: [
             {
@@ -40,25 +40,25 @@ var data = [
             }
         ]
     },
-    {
-        username: "testy",
-        password: "testy",
-        starScore: 6,
-        list: [
-            {
-                title: "test orion",
-                starValue: 1
-            },
-            {
-                title: "make a friend",
-                starValue: 2
-            },
-            {
-                title: "find love",
-                starValue: 3
-            }
-        ]
-    }
+//    {
+//        username: "testy",
+//        password: "testy",
+//        starScore: 6,
+//        list: [
+//            {
+//                title: "test orion",
+//                starValue: 1
+//            },
+//            {
+//                title: "make a friend",
+//                starValue: 2
+//            },
+//            {
+//                title: "find love",
+//                starValue: 3
+//            }
+//        ]
+//    }
 ];
 
 

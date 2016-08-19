@@ -20,14 +20,8 @@ body, html {
 
 #signed-in-as {
   height: 100%;
-  margin: 0;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; }
+  margin: 0; }
   #signed-in-as:hover, #signed-in-as:focus {
-    cursor: default;
     color: #fff; }
 
 body {
@@ -43,7 +37,6 @@ body {
 
 #overlay {
   position: fixed;
-  /* keeps the lightbox window in the current viewport */
   top: 0;
   left: 0;
   width: 100%;
@@ -78,3 +71,12 @@ body {
   border-radius: 50%;
   line-height: 1.5em;
   text-align: center; }
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+  .unselectable:hover, .unselectable:focus {
+    cursor: default; }
