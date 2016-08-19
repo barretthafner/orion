@@ -1,33 +1,21 @@
 var express     = require("express"),
-    jsonParser  = require("body-parser").json(),
     router      = express.Router(),
     passport    = require("passport"),
+    middleware  = require("../middleware"),
     User        = require("../models/User");
 
-function composeUserData(user) {
-//  let friendships;
-//  User.getFriends(user, function(err, friends){
-//    if (err) {
-//      console.log(err);
-//    } else {
-//      console.log(friends);
-//      console.log('bammmmm!');
-//      friendships = friends;
-//    }
-//  })
-
+function composeUserData(user, friends) {
   return {
     username: user.username,
     id: user._id,
-    email: user.email || null,
     starScore: user.starScore,
     list: user.list,
-    friendships: []
+    friendships: friends || []
   }
 }
 
 
-router.post("/api/register", jsonParser, function(req, res) {
+router.post("/api/register", function(req, res) {
   if (req.body.credentials) {
     const credentials = req.body.credentials;
     const newUser = new User({username: credentials.username});
@@ -50,27 +38,46 @@ router.post("/api/register", jsonParser, function(req, res) {
 });
 
 // login route
-router.post('/api/login', jsonParser, function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
+router.post('/api/login', passport.authenticate('local'), function(req, res) {
+  console.log(req.isAuthenticated());
+  User.getFriends(req.user, function(err, friends){
     if (err) {
-        return next(err);
-    }
-    if (!user) {
-        return res.status(500);
+      return res.status(500);
     } else {
-        req.logIn(user, function(err) {
-            if (err) {
-                return next(err);
-            } else {
-                return res.status(200).json(composeUserData(user));
-            }
-        });
+      return res.status(200).json(composeUserData(req.user, friends));
     }
-  })(req, res, next);
+  });
+
+
+
+//  passport.authenticate('local', function(err, user, info) {
+//    if (err) {
+//        return next(err);
+//    }
+//    if (!user) {
+//        return res.status(500);
+//    } else {
+//      req.logIn(user, function(err) {
+//          if (err) {
+//              return next(err);
+//          } else {
+//            User.getFriends(user, function(err, friends){
+//              if (err) {
+//                return res.status(500);
+//              } else {
+//                return res.status(200).json(composeUserData(user, friends));
+//              }
+//            });
+//          }
+//      });
+//    }
+//  })(req, res, next);
+
+
 });
 
 // logout route
-router.get("/api/logout", function(req, res) {
+router.get("/api/logout", middleware.isLoggedIn, function(req, res) {
     req.logout();
     res.sendStatus(200);
 });

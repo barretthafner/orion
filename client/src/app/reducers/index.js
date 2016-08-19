@@ -41,6 +41,24 @@ export default function appReducer(state = {}, action) {
       console.log('getUsersList error: ', action.error);
       return state;
 
+    case actions.SEND_FRIEND_REQUEST_SUCCESS:
+      const friendRequestOutput = Object.assign({}, state);
+      friendRequestOutput.user.friendships = action.friendships;
+      return friendRequestOutput;
+
+    case actions.SEND_FRIEND_REQUEST_ERROR:
+      console.log('getUsersList error: ', action.error);
+      return state;
+
+    case actions.UNFRIEND_SUCCESS:
+      const unFriendOutput = Object.assign({}, state);
+      unFriendOutput.user.friendships = action.friendships;
+      return unFriendOutput;
+
+    case actions.UNFRIEND_ERROR:
+      console.log('getUsersList error: ', action.error);
+      return state;
+
     default:
       return state;
   }

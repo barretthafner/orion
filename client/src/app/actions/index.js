@@ -146,7 +146,7 @@ export const logoutError = (error) => {
 export const getUsersList = () => {
   return (dispatch) => {
     const url = '/api/user';
-    return fetch(url)
+    return fetch(url, {credentials: 'same-origin'})
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -220,6 +220,95 @@ export const DELETE_CURRENT_USER_ERROR = 'DELETE_CURRENT_USER_ERROR';
 export const deleteCurrentUserError = (error) => {
   return {
     type: DELETE_CURRENT_USER_ERROR,
+    error
+  }
+}
+
+
+export const sendFriendRequest = (friendId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const url = '/api/user/' + state.app.user.id + '/friend/' + friendId;
+    return fetch(url, { method: 'put' })
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+        return res;
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return dispatch(
+          sendFriendRequestSuccess(data)
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          sendFriendRequestError(error)
+        );
+      });
+  }
+}
+
+export const SEND_FRIEND_REQUEST_SUCCESS = 'SEND_FRIEND_REQUEST_SUCCESS';
+export const sendFriendRequestSuccess = (friendships) => {
+  return {
+    type: SEND_FRIEND_REQUEST_SUCCESS,
+    friendships
+  }
+}
+export const SEND_FRIEND_REQUEST_ERROR = 'SEND_FRIEND_REQUEST_ERROR';
+export const sendFriendRequestError = (error) => {
+  return {
+    type: SEND_FRIEND_REQUEST_ERROR,
+    error
+  }
+}
+
+export const unFriend = (friend) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const url = '/api/user/' + state.app.user.id + '/friend/' + friend._id;
+    return fetch(url, { method: 'delete' })
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+        return res;
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return dispatch(
+          unFriendSuccess(data)
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          unFriendError(error)
+        );
+      });
+  }
+}
+
+export const UNFRIEND_SUCCESS = 'UNFRIEND_SUCCESS';
+export const unFriendSuccess = (friendships) => {
+  return {
+    type: UNFRIEND_SUCCESS,
+    friendships
+  }
+}
+export const UNFRIEND_ERROR = 'UNFRIEND_ERROR';
+export const unFriendError = (error) => {
+  return {
+    type: UNFRIEND_ERROR,
     error
   }
 }

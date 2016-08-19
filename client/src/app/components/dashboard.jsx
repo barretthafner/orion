@@ -10,12 +10,16 @@ const Dashboard = React.createClass({
     let friendshipsList;
     if (user.friendships) {
       friendshipsList = user.friendships.map((item, index) => {
-        <li className="list-group-item">
-          <p>{item.username}</p>
-          <p>Status: {item.status}</p>
-          <div className="btn btn-warning">Remove Friend</div>
-        </li>
-      })
+        return (
+          <li className="list-group-item" key={index}>
+            <p>{item.friend.username}</p>
+            <p>Status: {item.status}</p>
+            <div className="btn btn-warning" onClick={
+                () => this.props.unFriend(item.friend)
+              }>Remove Friend</div>
+          </li>
+        );
+      });
     }
 
     return (
@@ -75,6 +79,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteCurrentUser: (user) => {
       dispatch(actions.deleteCurrentUser(user));
+    },
+    unFriend: (friend) => {
+      dispatch(actions.unFriend(friend));
     }
   };
 };

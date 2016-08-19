@@ -6,6 +6,8 @@
 // Initialize -----------------------------------------------------------------
 // Require packages
 var express         = require("express"),
+    cookieParser    = require('cookie-parser'),
+    jsonParser  = require("body-parser").json(),
     mongoose        = require("mongoose"),
 //    methodOverride  = require("method-override"),
 //    flash           = require("connect-flash"),
@@ -29,9 +31,11 @@ if (process.argv.indexOf("--seed") > -1) {
 // Configure packages ---------------------------------------------------------
 //app.use(methodOverride("_method"));
 //app.use(flash());
+app.use(cookieParser());
+app.use(jsonParser);
 app.use(session({
     secret: "This is a secret...easily hackable",
-    resave: false,
+    resave: true,
     saveUninitialized: false
 }));
 app.use(passport.initialize());
