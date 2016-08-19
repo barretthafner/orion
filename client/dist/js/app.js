@@ -30419,8 +30419,63 @@
 	    var props = this.props;
 	    var currentUserId = this.props.state.app.user.id;
 	    var users = this.props.state.app.usersList;
+	    var friendships = this.props.state.app.user.friendships;
 	
 	    var userElements = [];
+	
+	    var index = 0;
+	    users.forEach(function (user) {
+	      if (user.id !== currentUserId) {
+	        var output = _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-4', key: index },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            user.username
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-primary', onClick: function onClick() {
+	                return _this.props.sendFriendRequest(user.id);
+	              } },
+	            'Request Friendship'
+	          )
+	        );
+	        friendships.forEach(function (friend) {
+	          if (friend._id === user.id) {
+	            output = _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-4', key: index },
+	              _react2.default.createElement(
+	                'h2',
+	                null,
+	                user.username
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'btn', disabled: true },
+	                'Request Sent'
+	              )
+	            );
+	          }
+	        });
+	        userElements.push(output);
+	        index++;
+	      }
+	    });
+	
+	    //            { users.map( (user, index) => {
+	    //            return (
+	    //              (user.id === currentUserId) ? null :
+	    //                <div className="col-md-4" key={index}>
+	    //                  <h2>{user.username}</h2>
+	    //                    <button className="btn btn-primary" onClick={() => this.props.sendFriendRequest(user.id)}>Request Friendship</button>
+	    //                </div>
+	    //            )
+	    //          })
+	    //        }
+	
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -30433,24 +30488,7 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'row text-center' },
-	        users.map(function (user, index) {
-	          return user.id === currentUserId ? null : _react2.default.createElement(
-	            'div',
-	            { className: 'col-md-4', key: index },
-	            _react2.default.createElement(
-	              'h2',
-	              null,
-	              user.username
-	            ),
-	            _react2.default.createElement(
-	              'button',
-	              { className: 'btn btn-primary', onClick: function onClick() {
-	                  return _this.props.sendFriendRequest(user.id);
-	                } },
-	              'Request Friendship'
-	            )
-	          );
-	        })
+	        userElements
 	      )
 	    );
 	  }
