@@ -9,7 +9,6 @@ const NavBar = React.createClass({
     if (!state.user) {
       navContent = (
         <ul className="nav navbar-nav navbar-right">
-         <li><Link to={'/state'}>State</Link></li>
           <li><Link to={'/login'}>Login</Link></li>
           <li><Link to={'/register'}>Sign Up</Link></li>
         </ul>
@@ -17,8 +16,12 @@ const NavBar = React.createClass({
     } else {
       navContent = (
         <ul className="nav navbar-nav navbar-right">
-          <li><Link to={'/state'}>State</Link></li>
-          <li><Link to={'/dashboard'}>Signed in as: { state.user.username }</Link></li>
+          <li>
+            <a id="signed-in-as" disabled={true}>
+              Signed in as: { state.user.username }
+            </a>
+          </li>
+          <li><Link to={'/dashboard'}>Dashboard</Link></li>
           <li><Link to={'/logout'}>Logout</Link></li>
         </ul>
       );

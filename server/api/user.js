@@ -140,19 +140,81 @@ router.put("/api/user/:id/list", (req, res) => {
 
 //complete list item
 router.delete("/api/user/:id/list/:itemId", (req, res) => {
-  User.findById(req.params.id, (err, user) => {
+  User.findById(req.params.id, (err, user1) => {
     if (err) {
       res.status(404).json(err);
     } else {
-      const newList = user.list.filter((item) => {
-        return !item._id.equals(req.params.itemId);
+      User.findById(req.body.friendId, (err, user2) => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+          let completedItem;
+          const newList = user1.list.filter((item) => {
+            if (item._id.equals(req.params.itemId)) {
+              completedItem = item;
+              return false;
+            } else {
+              return true;
+            }
+          });
+          user1.list = newList;
+          user1.save(() => {
+            user2.starScore += completedItem.starValue;
+            user2.save(() => {
+              User.getFriends(user1, (err, friendships) => {
+                if (err) {
+                  res.status(500).json(err);
+                } else {
+                  console.log(friendships);
+                  res.status(200).json({list: user1.list, friendships: friendships});
+                }
+              });
+            });
+          });
+        }
       });
-      user.list = newList;
-      user.save();
-      console.log(user.list);
-      res.status(200).json(user.list);
     }
   });
+
+//  User.findById(req.params.id, (err, user1)
+//    .then(user1 => User.findById(req.body.friendId))
+//    .catch(err => res.status(404).json(err))
+//    .
+//
+//    if (err) {
+//      res.status(404).json(err);
+//    } else {
+//      User.findById(req.body.friendId, (err, user2) => {
+//        if (err) {
+//          res.status(500).json(err);
+//        } else {
+//          let completedItem;
+//          const newList = user1.list.filter((item) => {
+//            if (item._id.equals(req.params.itemId)) {
+//              completedItem = item;
+//              return false;
+//            } else {
+//              return true;
+//            }
+//          });
+//          user1.list = newList;
+//          user1.save();
+//          user2.starScore += completedItem.starValue;
+//          user2.save();
+//          User.getFriends(user1, (err, friendships) => {
+//            if (err) {
+//              res.status(500).json(err);
+//            } else {
+//              console.log(friendships);
+//              res.status(200).json({list: user1.list, friendships: friendships});
+//            }
+//          });
+//        }
+//      });
+//
+//    }
+
+
 });
 
 

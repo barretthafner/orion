@@ -71,11 +71,19 @@ export default function appReducer(state = {}, action) {
     case actions.COMPLETE_ITEM_SUCCESS:
       const completeItemOutput = Object.assign({}, state);
       completeItemOutput.user.list = action.list;
+      completeItemOutput.user.friendships = action.friendships;
       return completeItemOutput;
 
     case actions.COMPLETE_ITEM_ERROR:
       console.log('completeItem error: ', action.error);
       return state;
+
+    case actions.SHOW_SELECT_FRIEND_OVERLAY:
+      return Object.assign({}, state, {itemSelected: action.itemId });
+
+    case actions.HIDE_SELECT_FRIEND_OVERLAY:
+      return Object.assign({}, state, {itemSelected: null });
+
 
     default:
       return state;

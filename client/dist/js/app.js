@@ -29195,11 +29195,18 @@
 	    case actions.COMPLETE_ITEM_SUCCESS:
 	      var completeItemOutput = Object.assign({}, state);
 	      completeItemOutput.user.list = action.list;
+	      completeItemOutput.user.friendships = action.friendships;
 	      return completeItemOutput;
 	
 	    case actions.COMPLETE_ITEM_ERROR:
 	      console.log('completeItem error: ', action.error);
 	      return state;
+	
+	    case actions.SHOW_SELECT_FRIEND_OVERLAY:
+	      return Object.assign({}, state, { itemSelected: action.itemId });
+	
+	    case actions.HIDE_SELECT_FRIEND_OVERLAY:
+	      return Object.assign({}, state, { itemSelected: null });
 	
 	    default:
 	      return state;
@@ -29215,7 +29222,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.completeItemError = exports.COMPLETE_ITEM_ERROR = exports.completeItemSuccess = exports.COMPLETE_ITEM_SUCCESS = exports.completeItem = exports.addListItemError = exports.ADD_LIST_ITEM_ERROR = exports.addListItemSuccess = exports.ADD_LIST_ITEM_SUCCESS = exports.addListItem = exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.hideSelectFriendOverlay = exports.HIDE_SELECT_FRIEND_OVERLAY = exports.showSelectFriendOverlay = exports.SHOW_SELECT_FRIEND_OVERLAY = exports.completeItemError = exports.COMPLETE_ITEM_ERROR = exports.completeItemSuccess = exports.COMPLETE_ITEM_SUCCESS = exports.completeItem = exports.addListItemError = exports.ADD_LIST_ITEM_ERROR = exports.addListItemSuccess = exports.ADD_LIST_ITEM_SUCCESS = exports.addListItem = exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29520,7 +29527,7 @@
 	  };
 	};
 	
-	var completeItem = exports.completeItem = function completeItem(itemId) {
+	var completeItem = exports.completeItem = function completeItem(itemId, friendId) {
 	  return function (dispatch, getState) {
 	    var state = getState();
 	    var url = '/api/user/' + state.app.user.id + '/list/' + itemId;
@@ -29530,7 +29537,7 @@
 	        'Content-Type': 'application/json'
 	      },
 	      body: JSON.stringify({
-	        itemId: itemId
+	        friendId: friendId
 	      })
 	    }).then(function (res) {
 	      if (res.state < 200 || res.status >= 300) {
@@ -29542,7 +29549,7 @@
 	    }).then(function (res) {
 	      return res.json();
 	    }).then(function (data) {
-	      return dispatch(completeItemSuccess(data));
+	      return dispatch(completeItemSuccess(data.list, data.friendships));
 	    }).catch(function (error) {
 	      return dispatch(completeItemError(error));
 	    });
@@ -29550,10 +29557,11 @@
 	};
 	
 	var COMPLETE_ITEM_SUCCESS = exports.COMPLETE_ITEM_SUCCESS = 'COMPLETE_ITEM_SUCCESS';
-	var completeItemSuccess = exports.completeItemSuccess = function completeItemSuccess(list) {
+	var completeItemSuccess = exports.completeItemSuccess = function completeItemSuccess(list, friendships) {
 	  return {
 	    type: COMPLETE_ITEM_SUCCESS,
-	    list: list
+	    list: list,
+	    friendships: friendships
 	  };
 	};
 	var COMPLETE_ITEM_ERROR = exports.COMPLETE_ITEM_ERROR = 'COMPLETE_ITEM_ERROR';
@@ -29561,6 +29569,21 @@
 	  return {
 	    type: COMPLETE_ITEM_ERROR,
 	    error: error
+	  };
+	};
+	
+	var SHOW_SELECT_FRIEND_OVERLAY = exports.SHOW_SELECT_FRIEND_OVERLAY = 'SHOW_SELECT_FRIEND_OVERLAY';
+	var showSelectFriendOverlay = exports.showSelectFriendOverlay = function showSelectFriendOverlay(itemId) {
+	  return {
+	    type: SHOW_SELECT_FRIEND_OVERLAY,
+	    itemId: itemId
+	  };
+	};
+	
+	var HIDE_SELECT_FRIEND_OVERLAY = exports.HIDE_SELECT_FRIEND_OVERLAY = 'HIDE_SELECT_FRIEND_OVERLAY';
+	var hideSelectFriendOverlay = exports.hideSelectFriendOverlay = function hideSelectFriendOverlay() {
+	  return {
+	    type: HIDE_SELECT_FRIEND_OVERLAY
 	  };
 	};
 
@@ -30301,6 +30324,12 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
+	            'StarScore: ',
+	            item.friend.starScore
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
 	            'Status: ',
 	            item.status
 	          ),
@@ -30315,136 +30344,181 @@
 	      });
 	    }
 	
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'container well' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-8' },
+	    var friendSelectorList = void 0;
+	    var friendOverlay = void 0;
+	
+	    if (this.props.state.app.itemSelected) {
+	      var friendships = this.props.state.app.user.friendships;
+	      friendSelectorList = friendships.map(function (item, index) {
+	        return _react2.default.createElement(
+	          'li',
+	          { className: 'list-group-item friend-selector', key: index, onClick: function onClick() {
+	              _this.props.completeItem(_this.props.state.app.itemSelected, item.friend._id);
+	              _this.props.hideSelectFriendOverlay();
+	            } },
 	          _react2.default.createElement(
 	            'p',
-	            { className: 'lead' },
-	            user.username,
-	            '\'s List'
-	          ),
+	            null,
+	            item.friend.username
+	          )
+	        );
+	      });
+	
+	      friendOverlay = _react2.default.createElement(
+	        'div',
+	        { id: 'overlay' },
+	        _react2.default.createElement(
+	          'div',
+	          { id: 'friend-selector-list', className: 'container well' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'list-group' },
-	            user.list.map(function (item, index) {
-	              return _react2.default.createElement(
-	                'li',
-	                { className: 'list-group-item', key: index },
-	                item.title,
-	                ' - StarValue: ',
-	                item.starValue,
-	                ' ',
-	                _react2.default.createElement(
-	                  'button',
-	                  { className: 'btn btn-success btn-sm', onClick: function onClick() {
-	                      _this.props.completeItem(item._id);
-	                    } },
-	                  'Complete'
-	                )
-	              );
-	            }),
+	            friendSelectorList
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'close-overlay', onClick: this.props.hideSelectFriendOverlay },
+	            'X'
+	          )
+	        )
+	      );
+	    }
+	
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'container well' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-8' },
 	            _react2.default.createElement(
-	              'li',
-	              { className: 'list-group-item' },
-	              _react2.default.createElement(
-	                'form',
-	                { className: 'form-inline' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'form-group' },
-	                  _react2.default.createElement(
-	                    'label',
-	                    { htmlFor: 'title' },
-	                    'Item'
-	                  ),
-	                  _react2.default.createElement('input', { type: 'text', id: 'title', className: 'form-control', ref: 'title' }),
-	                  _react2.default.createElement(
-	                    'label',
-	                    { htmlFor: 'starValue' },
-	                    'Star Value'
-	                  ),
-	                  _react2.default.createElement('input', { type: 'number', id: 'starValue', className: 'form-control', ref: 'starValue' }),
+	              'p',
+	              { className: 'lead' },
+	              user.username,
+	              '\'s List'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'list-group' },
+	              user.list.map(function (item, index) {
+	                return _react2.default.createElement(
+	                  'li',
+	                  { className: 'list-group-item', key: index },
+	                  item.title,
+	                  ' - StarValue: ',
+	                  item.starValue,
+	                  ' ',
 	                  _react2.default.createElement(
 	                    'button',
-	                    { className: 'btn btn-primary', onClick: function onClick(event) {
-	                        event.preventDefault();
-	                        _this.props.addListItem({ title: _this.refs.title.value, starValue: _this.refs.starValue.value });
-	                        _this.refs.title.value = "";
-	                        _this.refs.title.starValue.value = 1;
+	                    { className: 'btn btn-success btn-sm', onClick: function onClick() {
+	                        _this.props.showSelectFriendOverlay(item._id);
 	                      } },
-	                    'Add item'
+	                    'Complete'
+	                  )
+	                );
+	              }),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'list-group-item' },
+	                _react2.default.createElement(
+	                  'form',
+	                  { className: 'form-inline' },
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'form-group' },
+	                    _react2.default.createElement(
+	                      'label',
+	                      { htmlFor: 'title' },
+	                      'Item'
+	                    ),
+	                    _react2.default.createElement('input', { type: 'text', id: 'title', className: 'form-control', ref: 'title' }),
+	                    _react2.default.createElement(
+	                      'label',
+	                      { htmlFor: 'starValue' },
+	                      'Star Value'
+	                    ),
+	                    _react2.default.createElement('input', { type: 'number', id: 'starValue', className: 'form-control', ref: 'starValue' }),
+	                    _react2.default.createElement(
+	                      'button',
+	                      { className: 'btn btn-primary', onClick: function onClick(event) {
+	                          event.preventDefault();
+	                          _this.props.addListItem({ title: _this.refs.title.value, starValue: _this.refs.starValue.value });
+	                          _this.refs.title.value = "";
+	                          _this.refs.starValue.value = "";
+	                        } },
+	                      'Add item'
+	                    )
 	                  )
 	                )
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-4' },
+	            _react2.default.createElement(
+	              'p',
+	              { className: 'lead' },
+	              'Star Score'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'list-group' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'list-group-item' },
+	                user.starScore
 	              )
 	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-4' },
-	          _react2.default.createElement(
-	            'p',
-	            { className: 'lead' },
-	            'Star Score'
-	          ),
+	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'list-group' },
+	            { className: 'col-md-12' },
 	            _react2.default.createElement(
-	              'li',
-	              { className: 'list-group-item' },
-	              user.starScore
+	              'p',
+	              { className: 'lead' },
+	              'Friendships'
+	            ),
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { className: 'btn btn-primary', to: '/users' },
+	              'Find More Friends'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'list-group' },
+	              friendshipsList
+	            )
+	          )
+	        ),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-12 text-center' },
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { className: 'btn btn-danger', to: 'delete' },
+	              'Delete Account'
 	            )
 	          )
 	        )
 	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-12' },
-	          _react2.default.createElement(
-	            'p',
-	            { className: 'lead' },
-	            'Friendships'
-	          ),
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { className: 'btn btn-primary', to: '/users' },
-	            'Find More Friends'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'list-group' },
-	            friendshipsList
-	          )
-	        )
-	      ),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-12 text-center' },
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { className: 'btn btn-danger', to: 'delete' },
-	            'Delete Account'
-	          )
-	        )
-	      )
+	      friendOverlay
 	    );
 	  }
 	});
@@ -30466,8 +30540,15 @@
 	    addListItem: function addListItem(itemObj) {
 	      dispatch(actions.addListItem(itemObj));
 	    },
-	    completeItem: function completeItem(itemId) {
-	      dispatch(actions.completeItem(itemId));
+	    showSelectFriendOverlay: function showSelectFriendOverlay(itemId) {
+	      //pass itemId so that we can send it to the api when we pick the friend
+	      dispatch(actions.showSelectFriendOverlay(itemId));
+	    },
+	    hideSelectFriendOverlay: function hideSelectFriendOverlay() {
+	      dispatch(actions.hideSelectFriendOverlay());
+	    },
+	    completeItem: function completeItem(itemId, friendId) {
+	      dispatch(actions.completeItem(itemId, friendId));
 	    }
 	  };
 	};
@@ -30696,15 +30777,6 @@
 	          null,
 	          _react2.default.createElement(
 	            _reactRouter.Link,
-	            { to: '/state' },
-	            'State'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            _reactRouter.Link,
 	            { to: '/login' },
 	            'Login'
 	          )
@@ -30727,9 +30799,10 @@
 	          'li',
 	          null,
 	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: '/state' },
-	            'State'
+	            'a',
+	            { id: 'signed-in-as', disabled: true },
+	            'Signed in as: ',
+	            state.user.username
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -30738,8 +30811,7 @@
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/dashboard' },
-	            'Signed in as: ',
-	            state.user.username
+	            'Dashboard'
 	          )
 	        ),
 	        _react2.default.createElement(

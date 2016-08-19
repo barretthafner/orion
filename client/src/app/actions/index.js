@@ -365,7 +365,7 @@ export const addListItemError = (error) => {
   }
 }
 
-export const completeItem = (itemId) => {
+export const completeItem = (itemId, friendId) => {
   return (dispatch, getState) => {
     const state = getState();
     const url = '/api/user/' + state.app.user.id + '/list/' + itemId;
@@ -375,7 +375,7 @@ export const completeItem = (itemId) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          itemId : itemId
+          friendId : friendId
         })
       })
       .then((res) => {
@@ -391,7 +391,7 @@ export const completeItem = (itemId) => {
       })
       .then((data) => {
         return dispatch(
-          completeItemSuccess(data)
+          completeItemSuccess(data.list, data.friendships)
         );
       })
       .catch((error) => {
@@ -403,10 +403,11 @@ export const completeItem = (itemId) => {
 }
 
 export const COMPLETE_ITEM_SUCCESS = 'COMPLETE_ITEM_SUCCESS';
-export const completeItemSuccess = (list) => {
+export const completeItemSuccess = (list, friendships) => {
   return {
     type: COMPLETE_ITEM_SUCCESS,
-    list
+    list,
+    friendships
   }
 }
 export const COMPLETE_ITEM_ERROR = 'COMPLETE_ITEM_ERROR';
@@ -414,5 +415,20 @@ export const completeItemError = (error) => {
   return {
     type: COMPLETE_ITEM_ERROR,
     error
+  }
+}
+
+export const SHOW_SELECT_FRIEND_OVERLAY = 'SHOW_SELECT_FRIEND_OVERLAY';
+export const showSelectFriendOverlay = (itemId) => {
+  return {
+    type: SHOW_SELECT_FRIEND_OVERLAY,
+    itemId
+  }
+}
+
+export const HIDE_SELECT_FRIEND_OVERLAY = 'HIDE_SELECT_FRIEND_OVERLAY';
+export const hideSelectFriendOverlay = () => {
+  return {
+    type: HIDE_SELECT_FRIEND_OVERLAY
   }
 }
