@@ -364,3 +364,55 @@ export const addListItemError = (error) => {
     error
   }
 }
+
+export const completeItem = (itemId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const url = '/api/user/' + state.app.user.id + '/list/' + itemId;
+    return fetch(url, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          itemId : itemId
+        })
+      })
+      .then((res) => {
+        if (res.state < 200 || res.status >= 300) {
+          var error = new Error(res.statusText);
+          error.res = res;
+          throw error;
+        }
+        return res;
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return dispatch(
+          completeItemSuccess(data)
+        );
+      })
+      .catch((error) => {
+        return dispatch(
+          completeItemError(error)
+        );
+      });
+  }
+}
+
+export const COMPLETE_ITEM_SUCCESS = 'COMPLETE_ITEM_SUCCESS';
+export const completeItemSuccess = (list) => {
+  return {
+    type: COMPLETE_ITEM_SUCCESS,
+    list
+  }
+}
+export const COMPLETE_ITEM_ERROR = 'COMPLETE_ITEM_ERROR';
+export const completeItemError = (error) => {
+  return {
+    type: COMPLETE_ITEM_ERROR,
+    error
+  }
+}

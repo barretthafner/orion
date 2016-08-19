@@ -68,6 +68,15 @@ export default function appReducer(state = {}, action) {
       console.log('addListItem error: ', action.error);
       return state;
 
+    case actions.COMPLETE_ITEM_SUCCESS:
+      const completeItemOutput = Object.assign({}, state);
+      completeItemOutput.user.list = action.list;
+      return completeItemOutput;
+
+    case actions.COMPLETE_ITEM_ERROR:
+      console.log('completeItem error: ', action.error);
+      return state;
+
     default:
       return state;
   }

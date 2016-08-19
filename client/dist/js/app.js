@@ -29192,6 +29192,15 @@
 	      console.log('addListItem error: ', action.error);
 	      return state;
 	
+	    case actions.COMPLETE_ITEM_SUCCESS:
+	      var completeItemOutput = Object.assign({}, state);
+	      completeItemOutput.user.list = action.list;
+	      return completeItemOutput;
+	
+	    case actions.COMPLETE_ITEM_ERROR:
+	      console.log('completeItem error: ', action.error);
+	      return state;
+	
 	    default:
 	      return state;
 	  }
@@ -29206,7 +29215,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.addListItemError = exports.ADD_LIST_ITEM_ERROR = exports.addListItemSuccess = exports.ADD_LIST_ITEM_SUCCESS = exports.addListItem = exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
+	exports.completeItemError = exports.COMPLETE_ITEM_ERROR = exports.completeItemSuccess = exports.COMPLETE_ITEM_SUCCESS = exports.completeItem = exports.addListItemError = exports.ADD_LIST_ITEM_ERROR = exports.addListItemSuccess = exports.ADD_LIST_ITEM_SUCCESS = exports.addListItem = exports.unFriendError = exports.UNFRIEND_ERROR = exports.unFriendSuccess = exports.UNFRIEND_SUCCESS = exports.unFriend = exports.sendFriendRequestError = exports.SEND_FRIEND_REQUEST_ERROR = exports.sendFriendRequestSuccess = exports.SEND_FRIEND_REQUEST_SUCCESS = exports.sendFriendRequest = exports.deleteCurrentUserError = exports.DELETE_CURRENT_USER_ERROR = exports.deleteCurrentUserSuccess = exports.DELETE_CURRENT_USER_SUCCESS = exports.deleteCurrentUser = exports.getUsersListError = exports.GET_USERS_LIST_ERROR = exports.getUsersListSuccess = exports.GET_USERS_LIST_SUCCESS = exports.getUsersList = exports.logoutError = exports.LOGOUT_ERROR = exports.logoutSuccess = exports.LOGOUT_SUCCESS = exports.logout = exports.loginError = exports.LOGIN_ERROR = exports.loginSuccess = exports.LOGIN_SUCCESS = exports.login = exports.registerError = exports.REGISTER_ERROR = exports.registerSuccess = exports.REGISTER_SUCCESS = exports.register = undefined;
 	
 	__webpack_require__(269);
 	
@@ -29507,6 +29516,50 @@
 	var addListItemError = exports.addListItemError = function addListItemError(error) {
 	  return {
 	    type: ADD_LIST_ITEM_ERROR,
+	    error: error
+	  };
+	};
+	
+	var completeItem = exports.completeItem = function completeItem(itemId) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var url = '/api/user/' + state.app.user.id + '/list/' + itemId;
+	    return fetch(url, {
+	      method: 'delete',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify({
+	        itemId: itemId
+	      })
+	    }).then(function (res) {
+	      if (res.state < 200 || res.status >= 300) {
+	        var error = new Error(res.statusText);
+	        error.res = res;
+	        throw error;
+	      }
+	      return res;
+	    }).then(function (res) {
+	      return res.json();
+	    }).then(function (data) {
+	      return dispatch(completeItemSuccess(data));
+	    }).catch(function (error) {
+	      return dispatch(completeItemError(error));
+	    });
+	  };
+	};
+	
+	var COMPLETE_ITEM_SUCCESS = exports.COMPLETE_ITEM_SUCCESS = 'COMPLETE_ITEM_SUCCESS';
+	var completeItemSuccess = exports.completeItemSuccess = function completeItemSuccess(list) {
+	  return {
+	    type: COMPLETE_ITEM_SUCCESS,
+	    list: list
+	  };
+	};
+	var COMPLETE_ITEM_ERROR = exports.COMPLETE_ITEM_ERROR = 'COMPLETE_ITEM_ERROR';
+	var completeItemError = exports.completeItemError = function completeItemError(error) {
+	  return {
+	    type: COMPLETE_ITEM_ERROR,
 	    error: error
 	  };
 	};
@@ -30283,14 +30336,16 @@
 	            user.list.map(function (item, index) {
 	              return _react2.default.createElement(
 	                'li',
-	                { className: 'list-group-item', key: index, 'data-value': item.starValue },
+	                { className: 'list-group-item', key: index },
 	                item.title,
 	                ' - StarValue: ',
 	                item.starValue,
 	                ' ',
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'btn btn-success btn-sm' },
+	                  { className: 'btn btn-success btn-sm', onClick: function onClick() {
+	                      _this.props.completeItem(item._id);
+	                    } },
 	                  'Complete'
 	                )
 	              );
@@ -30322,7 +30377,7 @@
 	                        event.preventDefault();
 	                        _this.props.addListItem({ title: _this.refs.title.value, starValue: _this.refs.starValue.value });
 	                        _this.refs.title.value = "";
-	                        _this.refs.title.starValue.value = "";
+	                        _this.refs.title.starValue.value = 1;
 	                      } },
 	                    'Add item'
 	                  )
@@ -30410,6 +30465,9 @@
 	    },
 	    addListItem: function addListItem(itemObj) {
 	      dispatch(actions.addListItem(itemObj));
+	    },
+	    completeItem: function completeItem(itemId) {
+	      dispatch(actions.completeItem(itemId));
 	    }
 	  };
 	};

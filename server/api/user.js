@@ -138,5 +138,22 @@ router.put("/api/user/:id/list", (req, res) => {
   });
 });
 
+//complete list item
+router.delete("/api/user/:id/list/:itemId", (req, res) => {
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      res.status(404).json(err);
+    } else {
+      const newList = user.list.filter((item) => {
+        return !item._id.equals(req.params.itemId);
+      });
+      user.list = newList;
+      user.save();
+      console.log(user.list);
+      res.status(200).json(user.list);
+    }
+  });
+});
+
 
 module.exports = router;

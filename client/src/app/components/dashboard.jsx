@@ -30,8 +30,8 @@ const Dashboard = React.createClass({
             <div className="list-group">
               {user.list.map((item, index) => {
                 return (
-                  <li className="list-group-item" key={index} data-value={item.starValue}>
-                    {item.title} - StarValue: {item.starValue} <button className="btn btn-success btn-sm">Complete</button>
+                  <li className="list-group-item" key={index}>
+                    {item.title} - StarValue: {item.starValue} <button className="btn btn-success btn-sm" onClick={ () =>{this.props.completeItem(item._id) } }>Complete</button>
                   </li>
                 );
               })}
@@ -47,7 +47,7 @@ const Dashboard = React.createClass({
                           event.preventDefault();
                           this.props.addListItem({title: this.refs.title.value, starValue: this.refs.starValue.value})
                           this.refs.title.value = "";
-                          this.refs.title.starValue.value = "";
+                          this.refs.title.starValue.value = 1;
                         }
                       }>Add item</button>
                   </div>
@@ -104,6 +104,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addListItem: (itemObj) => {
       dispatch(actions.addListItem(itemObj));
+    },
+    completeItem: (itemId) => {
+      dispatch(actions.completeItem(itemId));
     }
   };
 };
