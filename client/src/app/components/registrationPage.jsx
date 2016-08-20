@@ -28,7 +28,7 @@ const RegistrationPage = React.createClass({
             }
           }>
           <label><input type="text" ref="username" placeholder="username" /></label>
-          <label><input type="password" ref="password" placeholder="password" /></label> (hint: password1)<br />
+          <label><input type="password" ref="password" placeholder="password" /></label>
           <button type="submit">Submit</button>
         </form>
       </div>
