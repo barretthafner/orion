@@ -12,6 +12,7 @@ var express         = require("express"),
 //    methodOverride  = require("method-override"),
 //    flash           = require("connect-flash"),
     session         = require("express-session"),
+    MongoStore      = require('connect-mongo')(session),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     app             = express();
@@ -20,7 +21,7 @@ var express         = require("express"),
 // Configure Database -----------------------------------------------------------
 // Use native promises
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.ORIONDBURL || "mongodb://localhost/orion");
+mongoose.connect(process.env.ORIONDBURL);
 
 // Database seed
 if (process.argv.indexOf("--seed") > -1) {
@@ -34,6 +35,7 @@ if (process.argv.indexOf("--seed") > -1) {
 app.use(jsonParser);
 app.use(session({
     secret: "This is a secret...easily hackable",
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: true,
     saveUninitialized: false
 }));
