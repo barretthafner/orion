@@ -1,3 +1,5 @@
+"use strict";
+
 var express     = require("express"),
     jsonParser  = require("body-parser").json(),
     router      = express.Router(),

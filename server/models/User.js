@@ -1,3 +1,5 @@
+"use strict";
+
 var mongoose = require("mongoose");
 var friends = require("mongoose-friends");
 var passportLocalMongoose = require("passport-local-mongoose");

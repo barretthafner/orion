@@ -1,3 +1,4 @@
+"use strict";
 /*  Orion
     Description: A web app for getting things done with your friends
     By: Barrett Hafner
