@@ -27,12 +27,11 @@ middlewareObj.checkOwnership = function(req, res, next){
 }
 
 middlewareObj.isLoggedIn = function(req, res, next){
-//  console.log(req.isAuthenticated());
-//  if(!req.isAuthenticated()){
-//        res.sendStatus(401);
-//    } else {
-//        return next();
-//    }
+  if(!req.isAuthenticated()){
+        res.sendStatus(401);
+    } else {
+        return next();
+    }
   return next();
 };
 

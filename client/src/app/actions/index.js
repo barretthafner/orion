@@ -5,6 +5,7 @@ export const register = (credentials) => {
     const url = '/api/register';
     return fetch(url, {
         method: 'post',
+        credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -58,6 +59,7 @@ export const login = (credentials) => {
     const url = '/api/login';
     return fetch(url, {
         method: 'post',
+        credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -108,7 +110,7 @@ export const loginError = (error) => {
 export const logout = () => {
   return (dispatch) => {
     const url = '/api/logout';
-    return fetch(url)
+    return fetch(url, {credentials: 'same-origin'})
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -171,6 +173,22 @@ export const getUsersList = () => {
   }
 }
 
+// test auth with jquery instead of fetch
+//export const getUsersList = () => {
+//  return (dispatch) => {
+//    const url = '/api/user';
+//    return $.ajax({
+//      url: url,
+//      dataType: 'json',
+//      type: 'GET',
+//      success: (data) => {
+//        console.log(data);
+//        dispatch(getUsersListSuccess(data));
+//      }
+//    })
+//  }
+//}
+
 export const GET_USERS_LIST_SUCCESS = 'GET_USERS_LIST_SUCCESS';
 export const getUsersListSuccess = (usersList) => {
   return {
@@ -189,7 +207,10 @@ export const getUsersListError = (error) => {
 export const deleteCurrentUser = (user) => {
   return (dispatch) => {
     const url = '/api/user/' + user.id;
-    return fetch(url,  { method: 'delete' })
+    return fetch(url, {
+        method: 'delete',
+        credentials: 'same-origin'
+      })
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -229,7 +250,10 @@ export const sendFriendRequest = (friendId) => {
   return (dispatch, getState) => {
     const state = getState();
     const url = '/api/user/' + state.app.user.id + '/friend/' + friendId;
-    return fetch(url, { method: 'put' })
+    return fetch(url, {
+        method: 'put',
+        credentials: 'same-origin'
+      })
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -273,7 +297,10 @@ export const unFriend = (friend) => {
   return (dispatch, getState) => {
     const state = getState();
     const url = '/api/user/' + state.app.user.id + '/friend/' + friend._id;
-    return fetch(url, { method: 'delete' })
+    return fetch(url, {
+        method: 'delete',
+        credentials: 'same-origin'
+      })
       .then((res) => {
         if (res.state < 200 || res.status >= 300) {
           var error = new Error(res.statusText);
@@ -319,6 +346,7 @@ export const addListItem = (item) => {
     const url = '/api/user/' + state.app.user.id + '/list';
     return fetch(url, {
         method: 'put',
+        credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -371,6 +399,7 @@ export const completeItem = (itemId, friendId) => {
     const url = '/api/user/' + state.app.user.id + '/list/' + itemId;
     return fetch(url, {
         method: 'delete',
+        credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json'
         },

@@ -14,7 +14,7 @@ var express         = require("express"),
     session         = require("express-session"),
     MongoStore      = require('connect-mongo')(session),
     passport        = require("passport"),
-    LocalStrategy   = require("passport-local"),
+    LocalStrategy   = require("passport-local").Strategy,
     app             = express();
 
 
@@ -46,7 +46,7 @@ app.use(passport.session());
 var User = require("./server/models/User");
 
 // Passport configuration -----------------------------------------------------
-passport.use(User.createStrategy());
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

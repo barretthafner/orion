@@ -40,25 +40,25 @@ var data = [
             }
         ]
     },
-//    {
-//        username: "testy",
-//        password: "testy",
-//        starScore: 6,
-//        list: [
-//            {
-//                title: "test orion",
-//                starValue: 1
-//            },
-//            {
-//                title: "make a friend",
-//                starValue: 2
-//            },
-//            {
-//                title: "find love",
-//                starValue: 3
-//            }
-//        ]
-//    }
+    {
+        username: "test",
+        password: "test",
+        starScore: 6,
+        list: [
+            {
+                title: "test orion",
+                starValue: 1
+            },
+            {
+                title: "make a friend",
+                starValue: 2
+            },
+            {
+                title: "find love",
+                starValue: 3
+            }
+        ]
+    }
 ];
 
 
