@@ -21,7 +21,9 @@ var express         = require("express"),
 // Configure Database -----------------------------------------------------------
 // Use native promises
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.ORIONDBURL);
+mongoose.connect(process.env.ORIONDBURL, {
+  useMongoClient: true
+});
 
 // Database seed
 if (process.argv.indexOf("--seed") > -1) {
