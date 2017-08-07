@@ -1,11 +1,8 @@
-"use strict";
+import mongoose, { Schema } from 'mongoose';
+import friends from 'mongoose-friends';
+import passportLocalMongoose from 'passport-local-mongoose';
 
-var mongoose = require("mongoose");
-var friends = require("mongoose-friends");
-var passportLocalMongoose = require("passport-local-mongoose");
-
-var UserSchema = new mongoose.Schema({
-//    username: { type: String, required: true, index: { unique: true } },
+const UserSchema = new Schema({
     email: String,
     starScore: Number,
     list: [{
@@ -16,5 +13,5 @@ var UserSchema = new mongoose.Schema({
 
 
 UserSchema.plugin(friends());
-UserSchema.plugin(passportLocalMongoose);
-module.exports = mongoose.model("User", UserSchema);
+UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+export default mongoose.model('User', UserSchema);

@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-var express     = require("express"),
+var express     = require('express'),
     router      = express.Router(),
-    passport    = require("passport"),
-    middleware  = require("../middleware"),
-    User        = require("../models/User");
+    passport    = require('passport'),
+    middleware  = require('../middleware'),
+    User        = require('../models/User');
 
 function composeUserData(user, friends) {
   return {
@@ -17,7 +17,7 @@ function composeUserData(user, friends) {
 }
 
 
-router.post("/api/register", function(req, res) {
+router.post('/api/register', function(req, res) {
   if (req.body.credentials) {
     const credentials = req.body.credentials;
     const newUser = new User({username: credentials.username});
@@ -27,10 +27,10 @@ router.post("/api/register", function(req, res) {
         res.status(500).json(err);
       } else {
         user.starScore = 0;
-        user.list.push({title: "Make a List!", starValue: 1});
+        user.list.push({title: 'Make a List!', starValue: 1});
         user.save();
         user.authenticate(credentials.password, function(){
-          console.log("Added User: " + user.username);
+          console.log('Added User: ' + user.username);
           res.status(201).json(composeUserData(user));
         });
       }
@@ -78,7 +78,7 @@ router.post('/api/login', passport.authenticate('local'), function(req, res) {
 });
 
 // logout route
-router.get("/api/logout", middleware.isLoggedIn, function(req, res) {
+router.get('/api/logout', middleware.isLoggedIn, function(req, res) {
     req.logout();
     res.sendStatus(200);
 });

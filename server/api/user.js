@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
-var express     = require("express"),
-    jsonParser  = require("body-parser").json(),
+var express     = require('express'),
+    jsonParser  = require('body-parser').json(),
     router      = express.Router(),
-    passport    = require("passport"),
-    middleware  = require("../middleware"),
-    User        = require("../models/User");
+    passport    = require('passport'),
+    middleware  = require('../middleware'),
+    User        = require('../models/User');
 
 function composeUserData(user) {
   return {
@@ -20,7 +20,7 @@ function composeUserData(user) {
 }
 
 // index route
-router.get("/api/user", middleware.isLoggedIn, (req, res) => {
+router.get('/api/user', middleware.isLoggedIn, (req, res) => {
     User.find({}, (err, users) => {
       if(err){
         res.status(500).json(err);
@@ -35,7 +35,7 @@ router.get("/api/user", middleware.isLoggedIn, (req, res) => {
 
 
 // destroy route
-router.delete("/api/user/:id", middleware.isLoggedIn, (req, res) => {
+router.delete('/api/user/:id', middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err){
       res.status(404).json(err);
@@ -71,7 +71,7 @@ router.delete("/api/user/:id", middleware.isLoggedIn, (req, res) => {
 });
 
 // sendFriendRequest
-router.put("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res) => {
+router.put('/api/user/:id/friend/:friendId', middleware.isLoggedIn, (req, res) => {
   const user1Id = req.params.id;
   const user2Id = req.params.friendId;
   User.findById(user1Id, (err, user1) => {
@@ -97,7 +97,7 @@ router.put("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res) =
 });
 
 // unFriend
-router.delete("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res) => {
+router.delete('/api/user/:id/friend/:friendId', middleware.isLoggedIn, (req, res) => {
   const user1Id = req.params.id;
   const user2Id = req.params.friendId;
     User.findById(user1Id, (err, user1) => {
@@ -128,7 +128,7 @@ router.delete("/api/user/:id/friend/:friendId", middleware.isLoggedIn, (req, res
 });
 
 //new list item
-router.put("/api/user/:id/list", middleware.isLoggedIn, (req, res) => {
+router.put('/api/user/:id/list', middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user) =>{
     if (err) {
       res.status(404).json(err);
@@ -141,7 +141,7 @@ router.put("/api/user/:id/list", middleware.isLoggedIn, (req, res) => {
 });
 
 //complete list item
-router.delete("/api/user/:id/list/:itemId", middleware.isLoggedIn, (req, res) => {
+router.delete('/api/user/:id/list/:itemId', middleware.isLoggedIn, (req, res) => {
   User.findById(req.params.id, (err, user1) => {
     if (err) {
       res.status(404).json(err);

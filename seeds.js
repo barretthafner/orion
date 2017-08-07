@@ -1,60 +1,60 @@
-var mongoose = require("mongoose");
-var User = require("./server/models/User");
+var mongoose = require('mongoose');
+var User = require('./server/models/User');
 
 var data = [
     {
-        username: "barrett",
-        password: "likespizza!",
+        username: 'barrett',
+        password: 'likespizza!',
         starScore: 5,
         list: [
             {
-                title: "go to yoga",
+                title: 'go to yoga',
                 starValue: 1
             },
             {
-                title: "get title/reg for party van",
+                title: 'get title/reg for party van',
                 starValue: 2
             },
             {
-                title: "write proposal for wta",
+                title: 'write proposal for wta',
                 starValue: 3
             }
         ]
     },
     {
-        username: "katy",
-        password: "isthecutest!",
+        username: 'katy',
+        password: 'isthecutest!',
         starScore: 5,
         list: [
             {
-                title: "yearly budget",
+                title: 'yearly budget',
                 starValue: 2
             },
             {
-                title: "clean inside of car",
+                title: 'clean inside of car',
                 starValue: 1
             },
             {
-                title: "process day",
+                title: 'process day',
                 starValue: 3
             }
         ]
     },
     {
-        username: "test",
-        password: "test",
+        username: 'test',
+        password: 'test',
         starScore: 6,
         list: [
             {
-                title: "test orion",
+                title: 'test orion',
                 starValue: 1
             },
             {
-                title: "make a friend",
+                title: 'make a friend',
                 starValue: 2
             },
             {
-                title: "find love",
+                title: 'find love',
                 starValue: 3
             }
         ]
@@ -68,7 +68,7 @@ function seedDb() {
         if(err){
             console.log(err);
         } else {
-            console.log("emptied database!");
+            console.log('emptied database!');
             data.forEach(function(seed){
                 var newUser = new User({username: seed.username});
                 User.register(newUser, seed.password, function(err, user){
@@ -79,7 +79,7 @@ function seedDb() {
                         user.starScore = seed.starScore;
                         user.list = seed.list;
                         user.save();
-                        console.log("added a user: " + user.username);
+                        console.log('added a user: ' + user.username);
                     }
                 });
             });
