@@ -18,7 +18,7 @@ import config from '../config';
 import seedDb from '../seeds';
 
 
-import User from './models/User');
+import User from './models/User';
 import api from './api';
 
 
@@ -45,7 +45,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false,
 	store: new MongoStore({
-		url: dbUrl,
+		url: config.dbUrl,
 		ttl: 1 * 24 * 60 * 60 // Removes sessions after 1 day.
 	})
 }));
@@ -62,7 +62,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Add routes -----------------------------------------------------------------
-app.use(api));
+app.use(api);
 
 // Listen ---------------------------------------------------------------------
 app.listen(config.port, config.ip, () => {

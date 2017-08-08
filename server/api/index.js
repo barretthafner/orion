@@ -8,6 +8,10 @@ router.use(function(req, res, next) {
 	next();
 });
 
+router.get('/', (req, res) => {
+	res.sendFile(__dirname + '/index.html');
+});
+
 import authRoutes from './auth';
 router.use(authRoutes);
 
@@ -15,8 +19,8 @@ import userRoutes from './user';
 router.use(userRoutes);
 
 // Catchall route
-app.get('*', function(req, res) {
-	res.sendFile('./index.html');
+router.get('*', function(req, res) {
+	res.redirect('/');
 });
 
 export default router;
